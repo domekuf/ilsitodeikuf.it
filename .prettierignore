@@ -1,0 +1,12 @@
+dist/
+.astro/
+.wrangler/
+node_modules/
+old-ilsitodeikuf.it/
+materiali/
+playwright-report/
+test-results/
+worker-configuration.d.ts
+package-lock.json
+PROMPT-migrazione-sito-kuf.md
+docs/

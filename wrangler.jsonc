@@ -1,0 +1,50 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ilsitodeikuf",
+  // Entrypoint custom (ADR-004): fetch gestito da Astro + handler `scheduled` per la retention.
+  "main": "./src/worker.ts",
+  "compatibility_date": "2026-10-20",
+  // Niente nodejs_compat finché non serve davvero.
+  "observability": { "enabled": true },
+
+  // Cron Trigger giornaliero per la retention dei dati (§8.5), alle 03:17 UTC.
+  "triggers": { "crons": ["17 3 * * *"] },
+
+  // Binding. Gli ID mancanti vanno compilati quando crei le risorse (vedi README, "Passi manuali").
+  // In locale (astro dev / wrangler dev) funzionano comunque, simulati da Miniflare.
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "kuf-sito",
+      "migrations_dir": "migrations",
+    },
+  ],
+  "kv_namespaces": [{ "binding": "CACHE" }],
+  "r2_buckets": [{ "binding": "DOWNLOADS", "bucket_name": "kuf-downloads" }],
+  "ratelimits": [
+    {
+      // ADR-012: il binding accetta solo periodi di 10 o 60 secondi.
+      "name": "FORM_LIMITER",
+      "namespace_id": "1001",
+      "simple": { "limit": 3, "period": 60 },
+    },
+  ],
+
+  // Variabili non segrete. I secret si impostano con `wrangler secret put` (vedi README).
+  "vars": {
+    "CALENDAR_QUERY": "Kuf @",
+    "CALENDAR_SOURCE": "google",
+    "GOOGLE_CALENDAR_ID": "rr1kivo3ieptrkn48l29gav2mc@group.calendar.google.com",
+    "MAIL_PROVIDER": "resend",
+    "MAIL_FROM": "Il Sito dei Kuf <sito@ilsitodeikuf.it>",
+    "MAIL_TO": "kuf.ravenna@gmail.com",
+    "CONSENT_TEXT_VERSION": "2026-11-v1",
+    "RETENTION_MONTHS": "24",
+  },
+
+  // Dominio custom: si attiva solo al primo deploy, dopo il tuo ok (Fase 7).
+  // "routes": [
+  //   { "pattern": "ilsitodeikuf.it", "custom_domain": true },
+  //   { "pattern": "www.ilsitodeikuf.it", "custom_domain": true }
+  // ],
+}

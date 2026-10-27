@@ -1,0 +1,266 @@
+@import 'tailwindcss';
+
+/* ------------------------------------------------------------------
+   Design token (§5). Palette verificata AA (vedi /styleguide).
+   ------------------------------------------------------------------ */
+@theme {
+  --color-paper: #fbfaf7; /* fondo, bianco caldo */
+  --color-surface: #ffffff; /* card, modali, form */
+  --color-ink: #141414; /* testo: 17,6:1 sulla carta */
+  --color-warm: #797264; /* accento dei vecchi bottoni: 4,6:1, solo testo ≥ 18px o elementi grafici */
+  --color-warm-ink: #6e675a; /* grigio caldo per testo piccolo: 5,4:1 */
+  --color-warm-dark: #575042; /* hover e contrasto: 7,7:1 */
+  --color-signal: #a84b24; /* unico colore di segnalazione (badge "prossimo"): bianco su signal 5,7:1 */
+  --color-line: rgb(20 20 20 / 0.15); /* filetti sottili al posto delle ombre */
+
+  --font-display: var(--font-walkway), 'Futura', 'Century Gothic', ui-sans-serif, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --radius-card: 6px;
+  --radius-control: 4px;
+
+  --ease-soft: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 300ms;
+
+  --animate-reveal: reveal linear both;
+
+  @keyframes reveal {
+    from {
+      opacity: 0;
+      translate: 0 14px;
+    }
+    to {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
+}
+
+/* ------------------------------------------------------------------
+   Base
+   ------------------------------------------------------------------ */
+@layer base {
+  html {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-text-size-adjust: 100%;
+    scrollbar-gutter: stable;
+  }
+
+  body {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    font-size: 1.0625rem; /* 17px */
+    line-height: 1.6;
+    /* carta maculata leggera, ripetibile (scripts/build-paper.py) */
+    background-image: url('../assets/textures/paper.webp');
+    background-size: 800px 800px;
+    background-repeat: repeat;
+    text-rendering: optimizeLegibility;
+  }
+
+  main {
+    flex: 1;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+  /* i titoli ricevono il focus via script (apertura modale): niente anello */
+  [tabindex='-1']:focus {
+    outline: none;
+  }
+
+  ::selection {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+
+  /* niente scroll della pagina sotto una modale aperta */
+  html:has(dialog[open]:modal) {
+    overflow: hidden;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Componenti tipografici
+   ------------------------------------------------------------------ */
+@layer components {
+  /* Titoli Walkway maiuscoli, con più aria del vecchio sito */
+  .title-display {
+    font-family: var(--font-display);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    line-height: 1.08;
+  }
+
+  /* Il separatore sottile sotto i titoli: omaggio al vecchio .pigna-separator */
+  .separator {
+    display: block;
+    width: 5.5rem;
+    height: 1px;
+    border: 0;
+    background: color-mix(in srgb, var(--color-ink) 60%, transparent);
+  }
+
+  /* Sottotitoli piccoli e spaziati */
+  .eyebrow {
+    font-size: 0.75rem;
+    line-height: 1.4;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--color-warm-ink);
+  }
+
+  .prose-kuf {
+    max-width: 65ch;
+  }
+
+  .surface {
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-card);
+  }
+
+  /* Foto della band: bianco e nero, a colori solo all'hover su desktop */
+  .photo-bw {
+    filter: grayscale(1) contrast(1.04);
+    transition: filter var(--duration-slow) var(--ease-soft);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .photo-bw:hover,
+    a:hover .photo-bw {
+      filter: none;
+    }
+  }
+
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}
+
+/* Reveal allo scroll: solo dove c'è animation-timeline e se l'utente non chiede meno movimento */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: var(--animate-reveal);
+      animation-timeline: view();
+      animation-range: entry 0% entry 35%;
+    }
+  }
+}
+
+/* ADR-008: View Transitions native tra pagine (niente <ClientRouter />). */
+@view-transition {
+  navigation: auto;
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--duration-base);
+  animation-timing-function: var(--ease-soft);
+}
+
+/* Movimento ridotto: tutto spento, anche le transizioni di pagina */
+@media (prefers-reduced-motion: reduce) {
+  @view-transition {
+    navigation: none;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ------------------------------------------------------------------
+   Form (usati da ContactForm e DownloadForm in Fase 4)
+   ------------------------------------------------------------------ */
+@layer components {
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .field__label {
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+  .field__hint {
+    font-size: 0.8125rem;
+    color: var(--color-warm-ink);
+  }
+  .field__control {
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.7rem 0.85rem;
+    border: 1px solid color-mix(in srgb, var(--color-ink) 35%, transparent);
+    border-radius: var(--radius-control);
+    background: var(--color-surface);
+    font: inherit;
+    color: var(--color-ink);
+    transition: border-color var(--duration-fast) var(--ease-soft);
+  }
+  .field__control::placeholder {
+    color: color-mix(in srgb, var(--color-warm-ink) 85%, transparent);
+  }
+  .field__control:hover {
+    border-color: var(--color-ink);
+  }
+  .field__control:focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 1px;
+    border-color: var(--color-ink);
+  }
+  textarea.field__control {
+    min-height: 9rem;
+    resize: vertical;
+  }
+  .field__control[aria-invalid='true'] {
+    border-color: var(--color-signal);
+  }
+  .field__error {
+    font-size: 0.8125rem;
+    color: var(--color-signal);
+  }
+  .check {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.7rem;
+    align-items: start;
+    font-size: 0.9375rem;
+    cursor: pointer;
+  }
+  .check input {
+    width: 1.15rem;
+    height: 1.15rem;
+    margin-top: 0.2rem;
+    accent-color: var(--color-ink);
+  }
+}

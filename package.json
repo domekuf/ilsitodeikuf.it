@@ -1,0 +1,47 @@
+{
+  "name": "ilsitodeikuf",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Il Sito dei Kuf — Astro 7 su Cloudflare Workers",
+  "engines": {
+    "node": ">=22.23.4"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check && tsc -p tsconfig.node.json",
+    "lint": "eslint .",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "cf:dev": "npm run build && wrangler dev",
+    "cf:types": "wrangler types",
+    "db:migrate:local": "wrangler d1 migrations apply kuf-sito --local",
+    "ci": "npm run lint && npm run format:check && npm run check && npm test && npm run build"
+  },
+  "dependencies": {
+    "@astrojs/cloudflare": "14.4.2",
+    "astro": "7.4.2"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.12",
+    "@axe-core/playwright": "4.14.0",
+    "@playwright/test": "1.64.1",
+    "@tailwindcss/vite": "4.3.3",
+    "@types/node": "22.20.5",
+    "eslint": "10.13.0",
+    "eslint-plugin-astro": "3.2.1",
+    "globals": "17.13.0",
+    "prettier": "3.9.10",
+    "prettier-plugin-astro": "1.1.2",
+    "tailwindcss": "4.3.3",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.72.1",
+    "vitest": "4.1.12",
+    "wrangler": "4.153.0"
+  }
+}

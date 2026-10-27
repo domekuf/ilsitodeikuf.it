@@ -1,0 +1,17 @@
+---
+// Home provvisoria: la home vera ("Il foglio dei Kuf") arriva in Fase 6.
+import Wordmark from '~/assets/logo/kuf-wordmark.svg';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import { SITE } from '~/lib/site';
+---
+
+<BaseLayout>
+  <section class="mx-auto flex max-w-3xl flex-col items-center px-5 pt-24 pb-16 text-center sm:pt-32">
+    <h1 class="w-full max-w-md">
+      <Wordmark aria-hidden="true" class="h-auto w-full" />
+      <span class="visually-hidden">Kuf</span>
+    </h1>
+    <p class="mt-10 max-w-prose text-xl sm:text-2xl">{SITE.claim}</p>
+    <p class="eyebrow mt-8">Il sito nuovo è in costruzione</p>
+  </section>
+</BaseLayout>

@@ -1,0 +1,173 @@
+---
+// Modale con URL (§6.1): <dialog> nativo gestito da src/scripts/modal-router.ts.
+//
+// - `id`: identifica la modale; i link con data-modal-link="{id}" la aprono.
+// - `listUrl`: dove si torna chiudendo (es. /concerti). Se manca, si torna alla pagina sotto.
+// - `open`: accesso diretto all'URL di dettaglio. Il server la renderizza già aperta,
+//   così funziona anche senza JavaScript ed è indicizzabile.
+// - `inline`: il contenuto è già nella pagina (es. Contattaci) e non va scaricato.
+// - `listTitle` / `modalTitle`: titoli della pagina a modale chiusa / aperta.
+// Il contenuto va dentro uno slot; il titolo deve avere id `${id}-title`.
+import Icon from '~/components/ui/Icon.astro';
+
+interface Props {
+  id: string;
+  listUrl?: string | undefined;
+  open?: boolean;
+  inline?: boolean;
+  size?: 'md' | 'lg';
+  /** titolo della pagina lista, ripristinato chiudendo dopo un accesso diretto */
+  listTitle?: string | undefined;
+  /** titolo della pagina quando la modale è aperta (per le modali inline) */
+  modalTitle?: string | undefined;
+}
+
+const { id, listUrl, open = false, inline = false, size = 'md', listTitle, modalTitle } = Astro.props;
+---
+
+<dialog
+  id={id}
+  class:list={['modal', size === 'lg' && 'modal--lg']}
+  data-modal
+  data-list-url={listUrl}
+  data-modal-inline={inline ? '' : undefined}
+  data-open-on-load={open ? '' : undefined}
+  data-list-title={listTitle}
+  data-modal-title={modalTitle}
+  aria-labelledby={`${id}-title`}
+  open={open}
+>
+  <div class="modal__panel">
+    <a href={listUrl ?? '/'} class="modal__close" data-modal-close aria-label="Chiudi">
+      <Icon name="x" size={24} />
+    </a>
+    <div class="modal__content" data-modal-content>
+      <slot />
+    </div>
+  </div>
+</dialog>
+
+<style>
+  .modal {
+    /* reset di <dialog> */
+    margin: 0;
+    padding: 0;
+    border: 0;
+    max-width: none;
+    max-height: none;
+    background: transparent;
+    color: var(--color-ink);
+    overflow: visible;
+
+    /* mobile: bottom sheet a tutta larghezza */
+    position: fixed;
+    inset: auto 0 0 0;
+    width: 100%;
+    height: auto;
+
+    opacity: 0;
+    translate: 0 100%;
+    transition:
+      opacity var(--duration-slow) var(--ease-soft),
+      translate var(--duration-slow) var(--ease-soft),
+      overlay var(--duration-slow) allow-discrete,
+      display var(--duration-slow) allow-discrete;
+  }
+  .modal[open] {
+    opacity: 1;
+    translate: 0 0;
+  }
+  @starting-style {
+    .modal[open] {
+      opacity: 0;
+      translate: 0 100%;
+    }
+  }
+
+  .modal::backdrop {
+    background: rgb(20 20 20 / 0);
+    transition:
+      background-color var(--duration-slow) var(--ease-soft),
+      overlay var(--duration-slow) allow-discrete,
+      display var(--duration-slow) allow-discrete;
+  }
+  .modal[open]::backdrop {
+    background: rgb(20 20 20 / 0.45);
+  }
+  @starting-style {
+    .modal[open]::backdrop {
+      background: rgb(20 20 20 / 0);
+    }
+  }
+
+  /* senza JS il <dialog open> non è "modale": lo trattiamo comunque come overlay */
+  .modal[open]:not(:modal) {
+    z-index: 50;
+    box-shadow: 0 0 0 100vmax rgb(20 20 20 / 0.45);
+  }
+
+  .modal__panel {
+    position: relative;
+    max-height: 92dvh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background: var(--color-surface);
+    border-radius: 14px 14px 0 0;
+    padding: 3.25rem 1.25rem max(1.5rem, env(safe-area-inset-bottom));
+  }
+  /* maniglia del bottom sheet */
+  .modal__panel::before {
+    content: '';
+    position: absolute;
+    top: 0.6rem;
+    left: 50%;
+    width: 2.5rem;
+    height: 4px;
+    translate: -50% 0;
+    border-radius: 2px;
+    background: var(--color-line);
+  }
+
+  .modal__close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    display: grid;
+    place-items: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 999px;
+    color: var(--color-ink);
+    transition: background-color var(--duration-fast) var(--ease-soft);
+  }
+  .modal__close:hover {
+    background: rgb(20 20 20 / 0.06);
+  }
+
+  /* desktop: centrata */
+  @media (min-width: 768px) {
+    .modal {
+      inset: 0;
+      margin: auto;
+      width: min(100% - 3rem, 40rem);
+      height: fit-content;
+      translate: 0 16px;
+    }
+    .modal--lg {
+      width: min(100% - 3rem, 60rem);
+    }
+    @starting-style {
+      .modal[open] {
+        translate: 0 16px;
+      }
+    }
+    .modal__panel {
+      max-height: calc(100dvh - 4rem);
+      border-radius: var(--radius-card);
+      padding: 3rem 2.5rem 2.5rem;
+    }
+    .modal__panel::before {
+      display: none;
+    }
+  }
+</style>

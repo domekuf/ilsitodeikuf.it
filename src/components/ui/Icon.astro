@@ -1,0 +1,34 @@
+---
+import { icons, type IconName } from './icons';
+
+interface Props {
+  name: IconName;
+  size?: number;
+  class?: string;
+}
+
+const { name, size = 20, class: className } = Astro.props;
+const icon = icons[name];
+const paint =
+  icon.mode === 'fill'
+    ? { fill: 'currentColor' }
+    : {
+        fill: 'none',
+        stroke: 'currentColor',
+        'stroke-width': 1.75,
+        'stroke-linecap': 'round' as const,
+        'stroke-linejoin': 'round' as const,
+      };
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox={icon.viewBox}
+  width={size}
+  height={size}
+  aria-hidden="true"
+  focusable="false"
+  class={className}
+  {...paint}
+  set:html={icon.body}
+/>

@@ -1,0 +1,22 @@
+---
+// Titolo Walkway maiuscolo + separatore sottile + sottotitolo spaziato (§5).
+interface Props {
+  title: string;
+  subtitle?: string;
+  level?: 1 | 2 | 3;
+  align?: 'center' | 'left';
+  id?: string;
+}
+
+const { title, subtitle, level = 2, align = 'center', id } = Astro.props;
+const Tag = `h${level}` as 'h1' | 'h2' | 'h3';
+const size = level === 1 ? 'text-5xl sm:text-6xl' : level === 2 ? 'text-4xl sm:text-5xl' : 'text-2xl';
+---
+
+<header class:list={['flex flex-col gap-3', align === 'center' ? 'items-center text-center' : 'items-start']}>
+  <Tag id={id} class:list={['title-display', size]}>
+    {title}
+  </Tag>
+  <hr class="separator" />
+  {subtitle && <p class="eyebrow">{subtitle}</p>}
+</header>

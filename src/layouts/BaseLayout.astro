@@ -1,0 +1,72 @@
+---
+import '~/styles/global.css';
+import { Font } from 'astro:assets';
+import ContactModal from '~/components/layout/ContactModal.astro';
+import Footer from '~/components/layout/Footer.astro';
+import Header from '~/components/layout/Header.astro';
+import MenuOverlay from '~/components/layout/MenuOverlay.astro';
+import SocialDock from '~/components/social/SocialDock.astro';
+import { SITE, cleanPath } from '~/lib/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** URL canonico, se diverso dalla pagina corrente (es. dettaglio aperto in modale) */
+  canonical?: string;
+  noindex?: boolean;
+  /** /contattaci: la modale dei contatti arriva già aperta */
+  contactOpen?: boolean;
+}
+
+const {
+  title = SITE.name,
+  description = `${SITE.name}, un gruppo di Ravenna che, a volte, fa la musica forte.`,
+  canonical,
+  noindex = false,
+  contactOpen = false,
+} = Astro.props;
+const canonicalUrl = new URL(canonical ?? cleanPath(Astro.url.pathname), Astro.site);
+---
+
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="theme-color" content="#FBFAF7" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <Font cssVariable="--font-walkway" preload />
+    <Font cssVariable="--font-inter" preload />
+    <script is:inline>
+      // l'ingresso animato del FAB si vede solo alla prima pagina della sessione
+      try {
+        if (sessionStorage.getItem('kuf-dock-seen')) document.documentElement.classList.add('dock-seen');
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <a
+      href="#contenuto"
+      class="visually-hidden focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded focus:bg-ink focus:px-4 focus:py-2 focus:text-paper"
+    >
+      Salta al contenuto
+    </a>
+    <Header />
+    <main id="contenuto">
+      <slot />
+    </main>
+    <Footer />
+    <SocialDock />
+    <MenuOverlay />
+    <ContactModal open={contactOpen} />
+    <slot name="modals" />
+    <script>
+      import { initModalRouter } from '~/scripts/modal-router';
+      initModalRouter();
+    </script>
+  </body>
+</html>

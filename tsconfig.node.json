@@ -1,0 +1,9 @@
+{
+  // File che girano in Node (config, test e2e), separati dai tipi del runtime Workers.
+  "extends": "astro/tsconfigs/strictest",
+  "include": ["*.config.ts", "tests/e2e/**/*"],
+  "compilerOptions": {
+    "types": ["node"],
+    "noEmit": true
+  }
+}

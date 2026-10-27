@@ -1,0 +1,231 @@
+---
+// FAB dei social (§6.4).
+// Desktop (≥ md): colonna verticale con ingresso sfalsato dal basso (omaggio al vecchio fadeInUp) e tooltip a sinistra.
+// Mobile: un solo bottone "speed dial" che apre i social a colonna.
+import Icon from '~/components/ui/Icon.astro';
+import { brandColors } from '~/components/ui/icons';
+import { SITE } from '~/lib/site';
+---
+
+<div class="dock" data-dock>
+  <ul id="dock-list" class="dock__list" aria-label="I Kuf sui social">
+    {SITE.social.map((s, i) => (
+      <li class="dock__item" style={`--i:${i};--n:${SITE.social.length};--brand:${brandColors[s.id]}`}>
+        <a href={s.url} class="dock__btn" rel="noopener me" target="_blank" aria-label={`Kuf su ${s.label}`}>
+          <Icon name={s.id} size={18} />
+        </a>
+        <span class="dock__tip" aria-hidden="true">
+          {s.label}
+        </span>
+      </li>
+    ))}
+  </ul>
+  <button
+    type="button"
+    class="dock__toggle"
+    aria-expanded="false"
+    aria-controls="dock-list"
+    aria-label="Social dei Kuf"
+    data-dock-toggle
+  >
+    <span class="dock__toggle-icon dock__toggle-icon--open">
+      <Icon name="music" size={22} />
+    </span>
+    <span class="dock__toggle-icon dock__toggle-icon--close">
+      <Icon name="x" size={22} />
+    </span>
+  </button>
+</div>
+
+<style>
+  .dock {
+    --size: 2.75rem;
+    position: fixed;
+    right: max(1rem, env(safe-area-inset-right));
+    bottom: max(1rem, env(safe-area-inset-bottom));
+    z-index: 40; /* sotto il top layer dei <dialog> */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.625rem;
+    transition:
+      opacity var(--duration-base) var(--ease-soft),
+      translate var(--duration-base) var(--ease-soft);
+  }
+  .dock--hidden {
+    opacity: 0;
+    translate: 0 1rem;
+    pointer-events: none;
+  }
+
+  .dock__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .dock__item {
+    position: relative;
+  }
+
+  .dock__btn {
+    display: grid;
+    place-items: center;
+    width: var(--size);
+    height: var(--size);
+    border-radius: 999px;
+    color: var(--color-ink);
+    background: var(--color-surface);
+    border: 1px solid var(--color-line);
+    box-shadow: 0 4px 12px rgb(20 20 20 / 0.08);
+    transition:
+      background-color var(--duration-fast) var(--ease-soft),
+      color var(--duration-fast) var(--ease-soft),
+      border-color var(--duration-fast) var(--ease-soft);
+  }
+  /* colore di brand all'hover, monocromatico a riposo */
+  .dock__btn:hover,
+  .dock__btn:focus-visible {
+    background: var(--brand);
+    border-color: var(--brand);
+    color: #fff;
+  }
+
+  .dock__tip {
+    position: absolute;
+    right: calc(100% + 0.75rem);
+    top: 50%;
+    translate: 6px -50%;
+    padding: 0.25rem 0.6rem;
+    border-radius: var(--radius-control);
+    background: var(--color-ink);
+    color: var(--color-paper);
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      opacity var(--duration-fast) var(--ease-soft),
+      translate var(--duration-fast) var(--ease-soft);
+  }
+
+  .dock__toggle {
+    display: grid;
+    place-items: center;
+    width: 3.25rem;
+    height: 3.25rem;
+    border-radius: 999px;
+    background: var(--color-ink);
+    color: var(--color-paper);
+    box-shadow: 0 6px 18px rgb(20 20 20 / 0.22);
+  }
+  .dock__toggle-icon {
+    grid-area: 1 / 1;
+    display: grid;
+    transition:
+      opacity var(--duration-fast) var(--ease-soft),
+      rotate var(--duration-base) var(--ease-soft);
+  }
+  .dock__toggle-icon--close {
+    opacity: 0;
+    rotate: -45deg;
+  }
+  .dock[data-open] .dock__toggle-icon--open {
+    opacity: 0;
+    rotate: 45deg;
+  }
+  .dock[data-open] .dock__toggle-icon--close {
+    opacity: 1;
+    rotate: 0deg;
+  }
+
+  /* pulse alla prima visita (aggiunto da JS dopo 2 s) */
+  .dock--pulse .dock__toggle {
+    animation: dock-pulse 1.4s var(--ease-soft) 2;
+  }
+  @keyframes dock-pulse {
+    0% {
+      box-shadow:
+        0 6px 18px rgb(20 20 20 / 0.22),
+        0 0 0 0 rgb(20 20 20 / 0.35);
+    }
+    100% {
+      box-shadow:
+        0 6px 18px rgb(20 20 20 / 0.22),
+        0 0 0 16px rgb(20 20 20 / 0);
+    }
+  }
+
+  /* ---------- Mobile: speed dial ---------- */
+  @media (max-width: 767.98px) {
+    .dock__item {
+      opacity: 0;
+      translate: 0 12px;
+      scale: 0.85;
+      visibility: hidden;
+      transition:
+        opacity var(--duration-base) var(--ease-soft),
+        translate var(--duration-base) var(--ease-soft),
+        scale var(--duration-base) var(--ease-soft),
+        visibility 0s linear var(--duration-base);
+      /* in chiusura escono dall'alto verso il basso */
+      transition-delay: calc(var(--i) * 30ms);
+    }
+    .dock[data-open] .dock__item {
+      opacity: 1;
+      translate: 0 0;
+      scale: 1;
+      visibility: visible;
+      transition:
+        opacity var(--duration-base) var(--ease-soft),
+        translate var(--duration-base) var(--ease-soft),
+        scale var(--duration-base) var(--ease-soft),
+        visibility 0s;
+      /* in apertura entrano dal basso verso l'alto */
+      transition-delay: calc((var(--n) - 1 - var(--i)) * 40ms);
+    }
+  }
+
+  /* ---------- Desktop: colonna sempre visibile ---------- */
+  @media (min-width: 768px) {
+    .dock {
+      right: max(1.5rem, env(safe-area-inset-right));
+      bottom: max(1.5rem, env(safe-area-inset-bottom));
+    }
+    .dock__toggle {
+      display: none;
+    }
+    .dock__item {
+      animation: dock-in var(--duration-slow) var(--ease-soft) both;
+      /* sfalsato dal basso: l'ultimo bottone entra per primo */
+      animation-delay: calc((var(--n) - 1 - var(--i)) * 90ms + 150ms);
+    }
+    /* l'ingresso si vede solo alla prima pagina della sessione */
+    :global(html.dock-seen) .dock__item {
+      animation: none;
+    }
+    .dock__item:hover .dock__tip,
+    .dock__btn:focus-visible + .dock__tip {
+      opacity: 1;
+      translate: 0 -50%;
+    }
+  }
+  @keyframes dock-in {
+    from {
+      opacity: 0;
+      translate: 0 16px;
+    }
+    to {
+      opacity: 1;
+      translate: 0 0;
+    }
+  }
+</style>
+
+<script>
+  import { initSocialDock } from '~/scripts/social-dock';
+  initSocialDock();
+</script>

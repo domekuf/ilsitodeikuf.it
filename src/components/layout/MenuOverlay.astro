@@ -1,0 +1,145 @@
+---
+// Menu a schermo intero su carta, link enormi in Walkway con ingresso sfalsato.
+// È un <dialog> nativo: focus trap, Esc e ripristino del focus gratis.
+import Logo from '~/assets/logo/kuf-wordmark-compact.svg';
+import Icon from '~/components/ui/Icon.astro';
+import { SITE, isActive } from '~/lib/site';
+
+const { pathname } = Astro.url;
+---
+
+<dialog id="menu" class="menu" aria-label="Menu">
+  <div class="mx-auto flex min-h-full max-w-6xl flex-col px-5 sm:px-8">
+    <div class="flex h-16 items-center justify-between sm:h-[4.5rem]">
+      <Logo aria-hidden="true" class="h-[22px] w-auto sm:h-6" />
+      <button
+        type="button"
+        class="-mr-2 inline-flex size-11 items-center justify-center"
+        data-menu-close
+        autofocus
+      >
+        <Icon name="x" size={26} />
+        <span class="visually-hidden">Chiudi il menu</span>
+      </button>
+    </div>
+    <nav aria-label="Menu" class="flex flex-1 items-center py-8">
+      <ul class="flex flex-col gap-1 sm:gap-2">
+        {SITE.nav.map((item, i) => (
+          <li class="menu__item" style={`--i:${i}`}>
+            <a
+              href={item.href}
+              data-modal-link={item.modal}
+              aria-current={isActive(item.href, pathname) ? 'page' : undefined}
+              class="menu__link title-display"
+            >
+              {item.label}
+              {item.note && <span class="menu__note">{item.note}</span>}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+    <p class="eyebrow pb-8">{SITE.claim}</p>
+  </div>
+</dialog>
+
+<style>
+  .menu {
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    color: var(--color-ink);
+    background-color: var(--color-paper);
+    background-image: url('../../assets/textures/paper.webp');
+    background-size: 800px 800px;
+    opacity: 0;
+    transition:
+      opacity var(--duration-base) var(--ease-soft),
+      overlay var(--duration-base) allow-discrete,
+      display var(--duration-base) allow-discrete;
+  }
+  .menu[open] {
+    opacity: 1;
+  }
+  @starting-style {
+    .menu[open] {
+      opacity: 0;
+    }
+  }
+  .menu::backdrop {
+    background: transparent;
+  }
+
+  .menu__item {
+    opacity: 0;
+    translate: 0 12px;
+    transition:
+      opacity var(--duration-slow) var(--ease-soft),
+      translate var(--duration-slow) var(--ease-soft);
+    transition-delay: calc(var(--i) * 45ms + 60ms);
+  }
+  .menu[open] .menu__item {
+    opacity: 1;
+    translate: 0 0;
+  }
+  @starting-style {
+    .menu[open] .menu__item {
+      opacity: 0;
+      translate: 0 12px;
+    }
+  }
+
+  .menu__link {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    font-size: clamp(2.25rem, 9vw, 4.5rem);
+    line-height: 1.15;
+    color: var(--color-warm-dark);
+    transition: color var(--duration-fast) var(--ease-soft);
+  }
+  .menu__link:hover,
+  .menu__link[aria-current='page'] {
+    color: var(--color-ink);
+  }
+  .menu__link[aria-current='page']::before {
+    content: '';
+    align-self: center;
+    width: 0.6em;
+    height: 1px;
+    background: currentColor;
+  }
+  .menu__note {
+    font-family: var(--font-sans);
+    font-size: 0.875rem;
+    letter-spacing: 0.15em;
+    color: var(--color-warm-ink);
+  }
+</style>
+
+<script>
+  const menu = document.getElementById('menu') as HTMLDialogElement | null;
+  const openers = document.querySelectorAll<HTMLButtonElement>('[data-menu-open]');
+
+  if (menu) {
+    const setExpanded = (value: boolean) =>
+      openers.forEach((b) => b.setAttribute('aria-expanded', String(value)));
+
+    openers.forEach((btn) =>
+      btn.addEventListener('click', () => {
+        menu.showModal();
+        setExpanded(true);
+      }),
+    );
+    menu.querySelector('[data-menu-close]')?.addEventListener('click', () => menu.close());
+    menu.addEventListener('close', () => setExpanded(false));
+    // i link del menu che aprono una modale (es. Contattaci) chiudono prima il menu
+    menu
+      .querySelectorAll('a[data-modal-link]')
+      .forEach((a) => a.addEventListener('click', () => menu.close()));
+  }
+</script>

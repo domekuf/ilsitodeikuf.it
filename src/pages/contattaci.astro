@@ -1,0 +1,17 @@
+---
+// Accesso diretto a /contattaci: la home con la modale dei contatti già aperta (§7.4).
+// TODO(Fase 6): quando la home vera esiste, renderizzarne il contenuto da un componente condiviso.
+import Wordmark from '~/assets/logo/kuf-wordmark.svg';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import { SITE } from '~/lib/site';
+---
+
+<BaseLayout title={`Contattaci · ${SITE.name}`} contactOpen>
+  <section class="mx-auto flex max-w-3xl flex-col items-center px-5 pt-24 pb-16 text-center sm:pt-32">
+    <p class="w-full max-w-md">
+      <Wordmark aria-hidden="true" class="h-auto w-full" />
+      <span class="visually-hidden">Kuf</span>
+    </p>
+    <p class="mt-10 max-w-prose text-xl sm:text-2xl">{SITE.claim}</p>
+  </section>
+</BaseLayout>

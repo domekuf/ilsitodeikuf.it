@@ -1,0 +1,349 @@
+---
+// /styleguide: solo in sviluppo (o con KUF_STYLEGUIDE=1 per i test e2e). Non finisce mai in produzione.
+import { Image } from 'astro:assets';
+import band from '~/assets/band/kuf-gruppo.jpg';
+import Monogram from '~/assets/logo/kuf-monogram.svg';
+import WordmarkCompact from '~/assets/logo/kuf-wordmark-compact.svg';
+import Wordmark from '~/assets/logo/kuf-wordmark.svg';
+import Button from '~/components/ui/Button.astro';
+import Card from '~/components/ui/Card.astro';
+import Icon from '~/components/ui/Icon.astro';
+import { icons, type IconName } from '~/components/ui/icons';
+import Modal from '~/components/ui/Modal.astro';
+import SectionTitle from '~/components/ui/SectionTitle.astro';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import { examples, type Example } from './examples';
+
+interface Props {
+  open?: Example;
+}
+
+const { open } = Astro.props;
+const listTitle = 'Styleguide · Il Sito dei Kuf';
+const title = open ? `${open.title} · Styleguide` : listTitle;
+
+const colors = [
+  { name: 'paper', hex: '#FBFAF7', use: 'fondo (bianco caldo)', ratio: '—' },
+  { name: 'surface', hex: '#FFFFFF', use: 'card, modali, form', ratio: '—' },
+  { name: 'ink', hex: '#141414', use: 'testo', ratio: '17,6:1' },
+  { name: 'warm', hex: '#797264', use: 'accento (dai vecchi bottoni), testo ≥ 18px', ratio: '4,6:1' },
+  { name: 'warm-ink', hex: '#6E675A', use: 'testo piccolo grigio', ratio: '5,4:1' },
+  { name: 'warm-dark', hex: '#575042', use: 'hover, contrasto', ratio: '7,7:1' },
+  { name: 'signal', hex: '#A84B24', use: 'solo badge "prossimo"', ratio: '5,7:1 (bianco su)' },
+];
+const iconNames = Object.keys(icons) as IconName[];
+---
+
+<BaseLayout title={title} noindex>
+  <div class="mx-auto flex max-w-5xl flex-col gap-24 px-5 py-16 sm:px-8">
+    <SectionTitle level={1} title="Styleguide" subtitle="Il sito dei Kuf, fatto oggi" />
+
+    <!-- Logo -->
+    <section aria-labelledby="sg-logo" class="flex flex-col gap-8">
+      <h2 id="sg-logo" class="eyebrow">
+        Logo
+      </h2>
+      <div class="grid gap-6 md:grid-cols-3">
+        <Card class="flex flex-col gap-4">
+          <div class="grid h-40 place-items-center">
+            <Wordmark aria-hidden="true" class="h-16 w-auto" />
+          </div>
+          <p class="text-sm">
+            <strong>Wordmark completo.</strong> Tratto sottile come l'originale, spaziatura ottica sistemata
+            (K–U più aria, U–F meno).
+          </p>
+        </Card>
+        <Card class="flex flex-col gap-4">
+          <div class="grid h-40 place-items-center">
+            <WordmarkCompact aria-hidden="true" class="h-7 w-auto" />
+          </div>
+          <p class="text-sm">
+            <strong>Compatto (header).</strong> Tratto più pieno e più spazio tra le lettere: si legge anche a
+            20–24 px.
+          </p>
+        </Card>
+        <Card class="flex flex-col gap-4">
+          <div class="grid h-40 place-items-center gap-3">
+            <div class="flex items-end gap-4">
+              <Monogram aria-hidden="true" class="size-16 rounded bg-ink p-1 text-paper" />
+              <Monogram aria-hidden="true" class="size-8 rounded bg-ink p-0.5 text-paper" />
+              <Monogram aria-hidden="true" class="size-4 border border-line" />
+            </div>
+          </div>
+          <p class="text-sm">
+            <strong>Monogramma K.</strong> Per favicon e icone: 64, 32 e 16 px.
+          </p>
+        </Card>
+      </div>
+      <div class="grid gap-6 md:grid-cols-2">
+        <div class="grid h-40 place-items-center rounded-[var(--radius-card)] bg-ink text-paper">
+          <Wordmark aria-hidden="true" class="h-14 w-auto" />
+        </div>
+        <div class="grid h-40 place-items-center rounded-[var(--radius-card)] border border-dashed border-warm">
+          <div class="outline outline-1 outline-signal/50 outline-dashed outline-offset-[18px]">
+            <Wordmark aria-hidden="true" class="h-14 w-auto" />
+          </div>
+        </div>
+      </div>
+      <p class="prose-kuf text-sm text-warm-ink">
+        Area di rispetto: almeno metà dell'altezza delle lettere su ogni lato (riquadro tratteggiato). Il logo
+        si usa in inchiostro su carta o in carta su inchiostro, mai su foto senza un fondo pieno.
+      </p>
+    </section>
+
+    <!-- Tipografia -->
+    <section aria-labelledby="sg-type" class="flex flex-col gap-8">
+      <h2 id="sg-type" class="eyebrow">
+        Tipografia
+      </h2>
+      <div class="flex flex-col gap-6">
+        <p class="title-display text-6xl sm:text-7xl">Concerti</p>
+        <p class="title-display text-4xl">Le cose da avere dei Kuf</p>
+        <p class="title-display text-2xl">Via Trieste · 2015</p>
+        <p class="font-display text-5xl font-bold tracking-wide">17 NOV</p>
+      </div>
+      <SectionTitle title="Titolo di sezione" subtitle="Con il separatore sottile, omaggio al vecchio sito" />
+      <div class="prose-kuf flex flex-col gap-4">
+        <p class="text-xl">Un gruppo di Ravenna che, a volte, fa la musica forte.</p>
+        <p>
+          Testo corrente in Inter, 17 px, righe di 60–70 caratteri. I Kuf cantano in italiano perché pensano
+          in italiano. I brani dei Kuf non sono registrati alla SIAE e non lo saranno mai. La parola Kuf
+          potrebbe significare tante cose, ma non significa niente.
+        </p>
+        <p class="text-sm text-warm-ink">Testo secondario in grigio caldo, per note e didascalie.</p>
+        <p class="eyebrow">Sottotitolo spaziato</p>
+      </div>
+    </section>
+
+    <!-- Colori -->
+    <section aria-labelledby="sg-colors" class="flex flex-col gap-8">
+      <h2 id="sg-colors" class="eyebrow">
+        Colori
+      </h2>
+      <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {colors.map((c) => (
+          <li class="surface overflow-hidden">
+            <div class="h-20 border-b border-line" style={`background:${c.hex}`} />
+            <div class="p-4 text-sm">
+              <p class="font-medium">{c.name}</p>
+              <p class="font-mono text-xs">{c.hex}</p>
+              <p class="mt-1 text-warm-ink">{c.use}</p>
+              <p class="mt-1 text-xs">Contrasto sulla carta: {c.ratio}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <!-- Bottoni -->
+    <section aria-labelledby="sg-buttons" class="flex flex-col gap-8">
+      <h2 id="sg-buttons" class="eyebrow">
+        Bottoni
+      </h2>
+      <div class="flex flex-wrap items-center gap-4">
+        <Button>Scarica il disco</Button>
+        <Button variant="outline">Aggiungi al calendario</Button>
+        <Button variant="ghost">Dimmi un'altra cosa vera</Button>
+        <Button size="sm">
+          <Icon name="download" size={16} /> Scheda tecnica
+        </Button>
+        <Button size="sm" variant="outline">
+          <Icon name="map-pin" size={16} /> Apri in Google Maps
+        </Button>
+        <Button disabled>Invio…</Button>
+      </div>
+    </section>
+
+    <!-- Card -->
+    <section aria-labelledby="sg-cards" class="flex flex-col gap-8">
+      <h2 id="sg-cards" class="eyebrow">
+        Card
+      </h2>
+      <div class="grid items-start gap-6 md:grid-cols-2">
+        <Card class="flex items-center gap-6">
+          <div class="border-r border-line pr-6 text-center">
+            <p class="font-display text-5xl leading-none font-bold">13</p>
+            <p class="eyebrow mt-1">Dic</p>
+          </div>
+          <div>
+            <span class="inline-block rounded-[3px] bg-signal px-2 py-0.5 text-[0.6875rem] tracking-[0.18em] text-white uppercase">
+              Prossimo
+            </span>
+            <p class="mt-2 text-xl">Locale di esempio</p>
+            <p class="text-sm text-warm-ink">Ravenna · ore 21:30</p>
+          </div>
+        </Card>
+        <Card padded={false} class="overflow-hidden">
+          <Image
+            src={band}
+            alt="I Kuf seduti in un locale"
+            widths={[480, 960]}
+            sizes="(min-width: 768px) 480px, 100vw"
+            class="photo-bw aspect-[4/3] w-full object-cover"
+          />
+          <p class="p-4 text-sm text-warm-ink">
+            Foto in bianco e nero, a colori al passaggio del mouse (solo desktop).
+          </p>
+        </Card>
+      </div>
+    </section>
+
+    <!-- Form -->
+    <section aria-labelledby="sg-form" class="flex flex-col gap-8">
+      <h2 id="sg-form" class="eyebrow">
+        Form
+      </h2>
+      <Card class="max-w-xl">
+        <form class="flex flex-col gap-5" onsubmit="return false">
+          <div class="field">
+            <label for="sg-name" class="field__label">
+              Nome
+            </label>
+            <input id="sg-name" class="field__control" autocomplete="name" required />
+          </div>
+          <div class="field">
+            <label for="sg-email" class="field__label">
+              Email
+            </label>
+            <input
+              id="sg-email"
+              type="email"
+              class="field__control"
+              aria-invalid="true"
+              aria-describedby="sg-email-err"
+              value="non-è-una-email"
+            />
+            <p id="sg-email-err" class="field__error" aria-live="polite">
+              Quest'email non ci piace: controlla che ci sia la @.
+            </p>
+          </div>
+          <div class="field">
+            <label for="sg-msg" class="field__label">
+              Messaggio <span class="font-normal text-warm-ink">(facoltativo)</span>
+            </label>
+            <textarea
+              id="sg-msg"
+              class="field__control"
+              placeholder="Scrivici taglia, quantità e come preferisci ritirarla"
+            ></textarea>
+          </div>
+          <p class="field__hint">
+            Usiamo nome ed email per risponderti e li conserviamo come spiegato nell'
+            <a href="/privacy" class="underline">
+              informativa privacy
+            </a>
+            .
+          </p>
+          <label class="check">
+            <input type="checkbox" />
+            <span>
+              Voglio ricevere ogni tanto notizie dai Kuf (nuovi dischi, concerti). Posso cancellarmi quando
+              voglio.
+            </span>
+          </label>
+          <div>
+            <Button type="submit">Invia</Button>
+          </div>
+        </form>
+      </Card>
+    </section>
+
+    <!-- Modale -->
+    <section aria-labelledby="sg-modal" class="flex flex-col gap-8">
+      <h2 id="sg-modal" class="eyebrow">
+        Modale con URL
+      </h2>
+      <p class="prose-kuf text-sm text-warm-ink">
+        Ogni riga apre la modale e cambia l'URL (prova indietro e avanti del browser, Esc, il clic fuori).
+        Aprendo direttamente l'URL di dettaglio la modale arriva già aperta dal server. Il link "Contattaci"
+        nel menu usa lo stesso meccanismo.
+      </p>
+      <ul class="surface divide-y divide-line">
+        {examples.map((ex) => (
+          <li>
+            <a
+              href={`/styleguide/esempio/${ex.slug}`}
+              data-modal-link="esempio"
+              class="flex items-center gap-5 px-5 py-4 transition-colors hover:bg-paper"
+            >
+              <span class="w-32 shrink-0 text-sm text-warm-ink">{ex.date}</span>
+              <span class="flex-1">{ex.title}</span>
+              <span class="text-sm text-warm-ink">{ex.city}</span>
+              <Icon name="arrow-right" size={18} />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <!-- Icone -->
+    <section aria-labelledby="sg-icons" class="flex flex-col gap-8">
+      <h2 id="sg-icons" class="eyebrow">
+        Icone
+      </h2>
+      <ul class="flex flex-wrap gap-5">
+        {iconNames.map((n) => (
+          <li class="flex w-20 flex-col items-center gap-2 text-center text-[0.6875rem] text-warm-ink">
+            <Icon name={n} size={24} class="text-ink" />
+            {n}
+          </li>
+        ))}
+      </ul>
+      <p class="text-sm text-warm-ink">Social: Simple Icons (CC0). Interfaccia: Lucide (ISC).</p>
+    </section>
+
+    <!-- Motion -->
+    <section aria-labelledby="sg-motion" class="flex flex-col gap-8">
+      <h2 id="sg-motion" class="eyebrow">
+        Movimento
+      </h2>
+      <div class="grid gap-4 sm:grid-cols-3">
+        {[1, 2, 3].map((n) => (
+          <Card class="reveal">
+            <p class="title-display text-3xl">{n}</p>
+            <p class="mt-2 text-sm text-warm-ink">Compare scorrendo (animation-timeline: view()).</p>
+          </Card>
+        ))}
+      </div>
+      <p class="prose-kuf text-sm text-warm-ink">
+        Durate 150–300 ms, easing morbido. Con "riduci movimento" del sistema operativo tutto si spegne,
+        incluse le transizioni tra le pagine.
+      </p>
+    </section>
+  </div>
+
+  <Modal slot="modals" id="esempio" listUrl="/styleguide" listTitle={listTitle} open={Boolean(open)}>
+    {open && (
+      <article class="flex flex-col gap-6">
+        <header class="flex flex-col gap-2">
+          <span
+            class:list={[
+              'self-start rounded-[3px] px-2 py-0.5 text-[0.6875rem] tracking-[0.18em] uppercase',
+              open.status === 'Prossimo' ? 'bg-signal text-white' : 'border border-line text-warm-ink',
+            ]}
+          >
+            {open.status}
+          </span>
+          <h2 id="esempio-title" class="title-display text-3xl sm:text-4xl">
+            {open.title}
+          </h2>
+          <p class="text-warm-ink">
+            {open.date} · {open.city}
+          </p>
+        </header>
+        <p>
+          Contenuto di esempio della modale. Qui, per i concerti, ci saranno orario, luogo con il link a
+          Google Maps e le foto della venue.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <Button size="sm" variant="outline">
+            <Icon name="map-pin" size={16} /> Apri in Google Maps
+          </Button>
+          <Button size="sm" variant="outline">
+            <Icon name="calendar-plus" size={16} /> Aggiungi al calendario
+          </Button>
+        </div>
+      </article>
+    )}
+  </Modal>
+</BaseLayout>

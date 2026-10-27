@@ -1,0 +1,35 @@
+{
+  "name": "Il Sito dei Kuf",
+  "claim": "Un gruppo di Ravenna che, a volte, fa la musica forte.",
+  "email": "kuf.ravenna@gmail.com",
+  "nav": [
+    { "label": "Home", "href": "/" },
+    { "label": "Concerti", "href": "/concerti" },
+    { "label": "Pigna", "href": "/pigna", "note": "2017" },
+    { "label": "Via Trieste", "href": "/via-trieste", "note": "2015" },
+    { "label": "Articoli", "href": "/articoli" },
+    { "label": "Press", "href": "/press" },
+    { "label": "Contattaci", "href": "/contattaci", "modal": "contattaci" }
+  ],
+  "social": [
+    { "id": "facebook", "label": "Facebook", "url": "https://www.facebook.com/kufff" },
+    {
+      "id": "youtube",
+      "label": "YouTube",
+      "url": "https://www.youtube.com/channel/UCTWu6UbxU95DmHe3LJIHbrw"
+    },
+    { "id": "instagram", "label": "Instagram", "url": "https://www.instagram.com/kuf.quellichesuonano" },
+    { "id": "spotify", "label": "Spotify", "url": "https://open.spotify.com/artist/19RHxgdzVkXbRI6IcwMPz3" },
+    { "id": "soundcloud", "label": "SoundCloud", "url": "https://soundcloud.com/kuf-4" }
+  ],
+  "facts": [
+    "I Kuf sono di Ravenna e sono nati nel 2014.",
+    "I Kuf cantano in italiano perché pensano in italiano.",
+    "I brani dei Kuf non sono registrati alla SIAE e non lo saranno mai.",
+    "La parola Kuf potrebbe significare tante cose, ma non significa niente.",
+    "Secondo Rockit i gruppi non devono contenere la ‘K’ all’interno del nome, quindi se hai un gruppo, ricordati di non chiamarlo Kuf.",
+    "I Kuf suonano musica dura: a volte no, a volte sì.",
+    "I Kuf si pronunciano con la U (no Kaf da anglosassone, né Kiuf da mittel-europeo, ma Kuf).",
+    "I Kuf stanno scrivendo altre canzoni e quando saranno belle usciranno."
+  ]
+}

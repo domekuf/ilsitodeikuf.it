@@ -1,0 +1,38 @@
+---
+// Bottone pieno (inchiostro) o outline. Con `href` diventa un link.
+import type { HTMLAttributes } from 'astro/types';
+
+type Variant = 'solid' | 'outline' | 'ghost';
+type Size = 'sm' | 'md';
+
+type Props = (HTMLAttributes<'a'> | HTMLAttributes<'button'>) & {
+  variant?: Variant;
+  size?: Size;
+  href?: string;
+};
+
+const { variant = 'solid', size = 'md', href, class: className, ...rest } = Astro.props;
+
+const base =
+  'inline-flex items-center justify-center gap-2 rounded-[var(--radius-control)] font-medium uppercase tracking-[0.12em] transition-colors duration-150 ease-[var(--ease-soft)] disabled:cursor-not-allowed disabled:opacity-50';
+const sizes: Record<Size, string> = {
+  sm: 'min-h-10 px-3.5 text-[0.75rem]',
+  md: 'min-h-12 px-5 text-[0.8125rem]',
+};
+const variants: Record<Variant, string> = {
+  solid: 'bg-ink text-paper hover:bg-warm-dark',
+  outline: 'border border-ink text-ink hover:bg-ink hover:text-paper',
+  ghost: 'text-ink underline-offset-4 hover:underline',
+};
+const classes = [base, sizes[size], variants[variant], className].filter(Boolean).join(' ');
+---
+
+{href ? (
+  <a href={href} class={classes} {...(rest as HTMLAttributes<'a'>)}>
+    <slot />
+  </a>
+) : (
+  <button type="button" class={classes} {...(rest as HTMLAttributes<'button'>)}>
+    <slot />
+  </button>
+)}

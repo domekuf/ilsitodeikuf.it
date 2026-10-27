@@ -1,0 +1,12 @@
+---
+import type { GetStaticPaths } from 'astro';
+import StyleguidePage from '../StyleguidePage.astro';
+import { examples } from '../examples';
+
+export const getStaticPaths = (() =>
+  examples.map((ex) => ({ params: { slug: ex.slug }, props: { ex } }))) satisfies GetStaticPaths;
+
+const { ex } = Astro.props;
+---
+
+<StyleguidePage open={ex} />

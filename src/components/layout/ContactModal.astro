@@ -1,0 +1,47 @@
+---
+// Modale "Contattaci", presente in tutte le pagine (§7.4). Il form vero arriva in Fase 4.
+import Modal from '~/components/ui/Modal.astro';
+import SectionTitle from '~/components/ui/SectionTitle.astro';
+import { SITE } from '~/lib/site';
+
+interface Props {
+  open?: boolean;
+}
+
+const { open = false } = Astro.props;
+const [user, domain] = SITE.email.split('@');
+---
+
+<Modal
+  id="contattaci"
+  inline
+  open={open}
+  listUrl={open ? '/' : undefined}
+  listTitle={open ? SITE.name : undefined}
+  modalTitle={`Contattaci · ${SITE.name}`}
+>
+  <SectionTitle id="contattaci-title" title="Scrivici" subtitle="Per raggiungere i Kuf" />
+  <div class="mx-auto mt-8 max-w-prose text-center">
+    <p class="text-warm-ink">Il modulo per scriverci arriva a breve.</p>
+    <p class="mt-4">
+      Oppure scrivici a{' '}
+      {/* indirizzo offuscato contro gli scraper: lo ricompone lo script, senza JS resta leggibile */}
+      <a
+        class="underline underline-offset-4"
+        data-mail-user={user}
+        data-mail-domain={domain}
+        href="/contattaci"
+      >
+        {user} [chiocciola] {domain}
+      </a>
+    </p>
+  </div>
+</Modal>
+
+<script>
+  document.querySelectorAll<HTMLAnchorElement>('a[data-mail-user]').forEach((a) => {
+    const address = `${a.dataset['mailUser']}@${a.dataset['mailDomain']}`;
+    a.href = `mailto:${address}`;
+    a.textContent = address;
+  });
+</script>

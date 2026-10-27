@@ -1,0 +1,12 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule: { interval: monthly }
+  - package-ecosystem: npm
+    directory: /
+    schedule: { interval: monthly }
+    groups:
+      # astro e l'adapter vanno aggiornati sempre insieme (ADR-001)
+      astro:
+        patterns: ['astro', '@astrojs/*']

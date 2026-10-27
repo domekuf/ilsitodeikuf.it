@@ -1,0 +1,47 @@
+---
+// Header minimale: logo a sinistra, menu a destra.
+// Da lg in su i link sono anche inline (7 voci corte stanno comode e su desktop si risparmia un clic);
+// sotto lg c'è solo il bottone che apre MenuOverlay.
+import Logo from '~/assets/logo/kuf-wordmark-compact.svg';
+import Icon from '~/components/ui/Icon.astro';
+import { SITE, isActive } from '~/lib/site';
+
+const { pathname } = Astro.url;
+---
+
+<header class="relative z-10 border-b border-line">
+  <div class="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:h-[4.5rem] sm:px-8">
+    <a href="/" class="-m-2 p-2 text-ink" aria-label="Il Sito dei Kuf, vai alla home">
+      <Logo aria-hidden="true" class="h-[22px] w-auto sm:h-6" />
+    </a>
+
+    <nav aria-label="Principale" class="hidden lg:block">
+      <ul class="flex items-center gap-7">
+        {SITE.nav.map((item) => (
+          <li>
+            <a
+              href={item.href}
+              data-modal-link={item.modal}
+              aria-current={isActive(item.href, pathname) ? 'page' : undefined}
+              class="border-b border-transparent py-1 text-[0.75rem] tracking-[0.18em] uppercase transition-colors hover:border-ink aria-[current=page]:border-ink"
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <button
+      type="button"
+      class="-mr-2 inline-flex size-11 items-center justify-center lg:hidden"
+      aria-haspopup="dialog"
+      aria-controls="menu"
+      aria-expanded="false"
+      data-menu-open
+    >
+      <Icon name="menu" size={26} />
+      <span class="visually-hidden">Apri il menu</span>
+    </button>
+  </div>
+</header>
