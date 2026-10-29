@@ -1,0 +1,114 @@
+{
+  "bio": {
+    "titolo": "Due parole, proprio due",
+    "testo": "I Kuf sono un gruppo di Ravenna che ha l'obbiettivo di liberare emozioni da troppo tempo nascoste dentro di noi, o quel tipo di formicolio allo stomaco che si provava al tramonto di un giorno d'estate della nostra adolescenza, quando l'orizzonte era davvero tale.",
+    "fonte": { "label": "Continua su iyezine", "url": "https://www.iyezine.com/kuf-pigna", "verified": false }
+  },
+  "formazione": [
+    { "nome": "Luca Rani", "ruolo": "voce" },
+    { "nome": "Ciro Pepe", "ruolo": "voce e basso" },
+    { "nome": "Domenico Di Iorio", "ruolo": "chitarra e synth" },
+    { "nome": "Andrea Gambi", "ruolo": "chitarra e synth" },
+    { "nome": "Giacomo Rossi", "ruolo": "batteria" }
+  ],
+  "download": [
+    {
+      "titolo": "Scheda tecnica",
+      "descrizione": "Lista canali e stage plan insieme",
+      "href": "/press/scheda-tecnica.pdf",
+      "formato": "PDF"
+    },
+    {
+      "titolo": "Stage plan",
+      "descrizione": "Disposizione sul palco",
+      "href": "/press/stage-plan.pdf",
+      "formato": "PDF"
+    },
+    {
+      "titolo": "Loghi",
+      "descrizione": "Wordmark e monogramma, in nero e in bianco, SVG e PNG",
+      "href": "/press/kuf-loghi.zip",
+      "formato": "ZIP"
+    }
+  ],
+  "loghi": [
+    { "titolo": "Logo nero", "file": "kuf-logo-nero" },
+    { "titolo": "Logo bianco", "file": "kuf-logo-bianco" },
+    { "titolo": "Monogramma nero", "file": "kuf-monogramma-nero" },
+    { "titolo": "Monogramma bianco", "file": "kuf-monogramma-bianco" }
+  ],
+  "_nota": "verified: true solo per i link controllati e ancora vivi (ottobre 2026). Gli altri non si mostrano finché qualcuno non li controlla a mano.",
+  "recensioni": [
+    { "anno": 2017, "testata": "Distopic", "url": "http://www.distopic.it/kuf-pigna/", "verified": true },
+    {
+      "anno": 2017,
+      "testata": "Music on Tnt",
+      "url": "https://www.music-on-tnt.com/recensioni/articolo.php?id_articolo=2095",
+      "verified": false
+    },
+    {
+      "anno": 2017,
+      "testata": "Rock Garage",
+      "url": "http://www.rockgarage.it/?p=66849",
+      "verified": false,
+      "dead": true
+    },
+    { "anno": 2017, "testata": "iyezine", "url": "https://www.iyezine.com/kuf-pigna", "verified": false },
+    {
+      "anno": 2015,
+      "testata": "Rockit",
+      "url": "https://www.rockit.it/recensione/27032/kuf-via-trieste",
+      "verified": true
+    }
+  ],
+  "articoli": [
+    {
+      "anno": 2018,
+      "testata": "Il blog dell'Alligatore",
+      "url": "https://alligatore.blogspot.com/2018/01/in-palude-con-i-kuf.html",
+      "verified": true
+    },
+    {
+      "anno": 2017,
+      "testata": "Radiocoop",
+      "url": "http://www.radiocoop.it/kuf-tenco-pasolini/",
+      "verified": false
+    },
+    {
+      "anno": 2017,
+      "testata": "Ravenna Today",
+      "url": "http://www.ravennatoday.it/eventi/kuf-presentano-il-nuovo-album-pigna-all-almagia.html",
+      "verified": false
+    },
+    {
+      "anno": 2017,
+      "testata": "Tuco",
+      "url": "http://www.tuco.info/i-kuf-presentano-il-nuovo-album-pigna-allalmagia/",
+      "verified": false
+    },
+    {
+      "anno": 2017,
+      "testata": "Long Live Rock 'n' Roll",
+      "url": "http://www.longliverocknroll.it/kuf-pronto-secondo-album-anteprima-line/kuf-pigna/",
+      "verified": false
+    },
+    {
+      "anno": 2017,
+      "testata": "Distopic (anteprima del video di Matite)",
+      "url": "http://www.distopic.it/anteprima-kuf/",
+      "verified": true
+    },
+    {
+      "anno": 2017,
+      "testata": "Exhimusic",
+      "url": "https://exhimusic.wordpress.com/2017/11/11/kuf-pigna-autoprodotto-17-november-2017/",
+      "verified": true
+    },
+    {
+      "anno": 2017,
+      "testata": "Onda Musicale",
+      "url": "http://www.ondamusicale.it/index.php/underground/11685-uscira-il-17-novembre-pigna-il-nuovo-album-dei-kuf",
+      "verified": true
+    }
+  ]
+}

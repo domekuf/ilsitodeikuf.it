@@ -1,0 +1,77 @@
+---
+// Download di un disco (§6.3): verifica il token firmato e fa lo stream dello zip da R2.
+// Token scaduto o non valido: pagina gentile con il link per richiederne un altro.
+import { getEntry } from 'astro:content';
+import { DOWNLOAD_TOKEN_SECRET } from 'astro:env/server';
+import { env } from 'cloudflare:workers';
+import Button from '~/components/ui/Button.astro';
+import SectionTitle from '~/components/ui/SectionTitle.astro';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import { incrementDownload } from '~/lib/db/contacts';
+import { SITE } from '~/lib/site';
+import { readDownloadToken } from '~/lib/tokens';
+
+export const prerender = false;
+
+const bindings = env as unknown as Partial<Env>;
+const token = Astro.params.token ?? '';
+const check = DOWNLOAD_TOKEN_SECRET ? await readDownloadToken(token, DOWNLOAD_TOKEN_SECRET) : null;
+
+let problem: 'expired' | 'invalid' | 'missing' = 'invalid';
+let albumSlug: string | null = null;
+
+if (check?.ok) {
+  albumSlug = check.payload.a;
+  const album = await getEntry('albums', check.payload.a);
+  const object = album ? await bindings.DOWNLOADS?.get(album.data.download.key) : null;
+  if (album && object) {
+    if (check.payload.s > 0 && bindings.DB) {
+      Astro.locals.cfContext.waitUntil(
+        incrementDownload(bindings.DB, check.payload.s).catch(() => undefined),
+      );
+    }
+    const filename = album.data.download.filename;
+    const ascii = filename.normalize('NFD').replace(/[^\x20-\x7e]/g, '');
+    return new Response(object.body, {
+      headers: {
+        'Content-Type': 'application/zip',
+        'Content-Length': String(object.size),
+        'Content-Disposition': `attachment; filename="${ascii}"; filename*=UTF-8''${encodeURIComponent(filename)}`,
+        'Cache-Control': 'private, no-store',
+        'X-Robots-Tag': 'noindex',
+      },
+    });
+  }
+  problem = 'missing';
+} else if (check && !check.ok) {
+  problem = check.reason;
+}
+
+Astro.response.status = problem === 'missing' ? 503 : problem === 'expired' ? 410 : 404;
+Astro.response.headers.set('Cache-Control', 'no-store');
+const albumHref = albumSlug ? `/${albumSlug}` : '/pigna';
+const messages = {
+  expired: {
+    title: 'Link scaduto',
+    text: 'I link per scaricare i dischi valgono 7 giorni. Richiedine uno nuovo: ci vuole un attimo.',
+  },
+  invalid: {
+    title: 'Link non valido',
+    text: 'Questo link non funziona. Forse è stato copiato a metà? Richiedine uno nuovo dalla pagina del disco.',
+  },
+  missing: {
+    title: 'Un attimo di pazienza',
+    text: `Il disco non è ancora disponibile per il download. Riprova più tardi o scrivici a ${SITE.email}.`,
+  },
+}[problem];
+---
+
+<BaseLayout title={`${messages.title} · ${SITE.name}`} noindex>
+  <section class="mx-auto flex max-w-xl flex-col items-center gap-8 px-5 py-24 text-center">
+    <SectionTitle level={1} title={messages.title} subtitle="Download" />
+    <p>{messages.text}</p>
+    <div class="flex flex-wrap justify-center gap-3">
+      <Button href={albumHref}>Vai alla pagina del disco</Button>
+    </div>
+  </section>
+</BaseLayout>

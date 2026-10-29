@@ -1,0 +1,1209 @@
+{
+  "kind": "calendar#events",
+  "summary": "Kuf che fanno i concerti",
+  "timeZone": "Europe/Rome",
+  "items": [
+    {
+      "id": "ikge0bogsg9g7dl8on0l4tei6o",
+      "status": "confirmed",
+      "summary": "Kuf @ Ravenna - Artificierie Almagià w/ Nemesi",
+      "start": {
+        "date": "2014-03-14"
+      },
+      "end": {
+        "date": "2014-03-14"
+      }
+    },
+    {
+      "id": "polq5pp4mkvbne4e8i6frmbhsk",
+      "status": "confirmed",
+      "summary": "Kuf @ Forlì - XRay",
+      "start": {
+        "date": "2014-04-01"
+      },
+      "end": {
+        "date": "2014-04-01"
+      }
+    },
+    {
+      "id": "v9tr50ruq8uiv9jtc497d38aa0",
+      "status": "confirmed",
+      "summary": "Kuf @ Ravenna - Around The Rock  Artificierie Almagià",
+      "start": {
+        "date": "2014-04-02"
+      },
+      "end": {
+        "date": "2014-04-02"
+      }
+    },
+    {
+      "id": "qb2kima9q67gp694q8lfl7m8v0",
+      "status": "confirmed",
+      "summary": "Kuf @ Ravenna - C.S.A. Spartaco",
+      "start": {
+        "date": "2014-04-19"
+      },
+      "end": {
+        "date": "2014-04-19"
+      }
+    },
+    {
+      "id": "6mc5pndclug069iefhlprm333o",
+      "status": "confirmed",
+      "summary": "Kuf @ Ravenna - Remember Babo w/ Mellowtoy, Postvorta, Several Union",
+      "start": {
+        "date": "2014-04-21"
+      },
+      "end": {
+        "date": "2014-04-21"
+      }
+    },
+    {
+      "id": "8atdnu7coe8djvnedubnvabpq4",
+      "status": "confirmed",
+      "summary": "Kuf @ Forlì - XRay Pub",
+      "start": {
+        "date": "2014-05-10"
+      },
+      "end": {
+        "date": "2014-05-10"
+      }
+    },
+    {
+      "id": "5fsrkvfse5lf4akvd42lj00apo",
+      "status": "confirmed",
+      "summary": "Kuf @ Classe - Festa del PD",
+      "start": {
+        "date": "2014-05-11"
+      },
+      "end": {
+        "date": "2014-05-11"
+      }
+    },
+    {
+      "id": "dlum6ier4ds0ijj1aam3ljpmq4",
+      "status": "confirmed",
+      "summary": "Kuf @ Lugo - Lughé",
+      "start": {
+        "date": "2014-05-15"
+      },
+      "end": {
+        "date": "2014-05-15"
+      }
+    },
+    {
+      "id": "apt0lddub944m7h9t874rdt1k0",
+      "status": "confirmed",
+      "summary": "Kuf @ Cesena - Panjighina  in collaborazione con Vidia Club",
+      "start": {
+        "date": "2014-06-07"
+      },
+      "end": {
+        "date": "2014-06-07"
+      }
+    },
+    {
+      "id": "5nfmug92v9uc88mr1cu8v1a7qo",
+      "status": "confirmed",
+      "summary": "Kuf @ Marina di Ravenna - Sottomarino w/ Jaspers",
+      "start": {
+        "date": "2014-07-02"
+      },
+      "end": {
+        "date": "2014-07-02"
+      }
+    },
+    {
+      "id": "b2n9rqid6074qvtbrl9e1qm9ps",
+      "status": "confirmed",
+      "summary": "Kuf @ Camerlona - Festa del PD",
+      "start": {
+        "date": "2014-07-31"
+      },
+      "end": {
+        "date": "2014-07-31"
+      }
+    },
+    {
+      "id": "uk1rjgrb02nc1qhu07e7q2227k",
+      "status": "confirmed",
+      "summary": "Kuf @ Lugo - Parco del Tondo w/ 1000 Degrees",
+      "start": {
+        "date": "2014-08-08"
+      },
+      "end": {
+        "date": "2014-08-08"
+      }
+    },
+    {
+      "id": "41779iad7k8b20num9pjkgicpk",
+      "status": "confirmed",
+      "summary": "Kuf @ Ravenna - Festa del PD w/ Hydrahead",
+      "start": {
+        "date": "2014-09-15"
+      },
+      "end": {
+        "date": "2014-09-15"
+      }
+    },
+    {
+      "id": "0jifocsmn0ti57801unpd9srac",
+      "status": "confirmed",
+      "summary": "Kuf @ Ferrara - Lobo Loco",
+      "start": {
+        "date": "2014-11-14"
+      },
+      "end": {
+        "date": "2014-11-14"
+      }
+    },
+    {
+      "id": "qcro3pnkqsslh30mkddthhkth8",
+      "status": "confirmed",
+      "summary": "Kuf @ Ravenna - Valtorto w/ Babel",
+      "start": {
+        "date": "2014-11-15"
+      },
+      "end": {
+        "date": "2014-11-15"
+      }
+    },
+    {
+      "id": "dp016l89cabp6j0gmt4q893nrs",
+      "status": "confirmed",
+      "summary": "Kuf @ Bologna - Freak Out w/ Babel",
+      "start": {
+        "date": "2014-11-16"
+      },
+      "end": {
+        "date": "2014-11-16"
+      }
+    },
+    {
+      "id": "u2eado3ngjmaklaui8n6nuccoo",
+      "status": "confirmed",
+      "summary": "Kuf @ Lugo - Lughè",
+      "start": {
+        "date": "2014-11-21"
+      },
+      "end": {
+        "date": "2014-11-21"
+      }
+    },
+    {
+      "id": "sln5h23v0tnfg06aavo4d96e8o",
+      "status": "confirmed",
+      "summary": "Kuf @ Pinerolo - L'Associazione",
+      "start": {
+        "date": "2015-02-13"
+      },
+      "end": {
+        "date": "2015-02-13"
+      }
+    },
+    {
+      "id": "q3jps599hki795eum1reh6a3o4",
+      "status": "confirmed",
+      "summary": "Kuf @ Vigevano - Cooperativa Portalupi",
+      "start": {
+        "date": "2015-03-06"
+      },
+      "end": {
+        "date": "2015-03-06"
+      }
+    },
+    {
+      "id": "d1shnnokb1970appdtetgnpl58",
+      "status": "confirmed",
+      "summary": "Kuf @ Bologna - Laboratorio Crash w/ Linea 77",
+      "start": {
+        "date": "2015-03-14"
+      },
+      "end": {
+        "date": "2015-03-14"
+      }
+    },
+    {
+      "id": "j4ovkdnfs4a7epbcps89qs9gk4",
+      "status": "confirmed",
+      "summary": "Kuf @ Modena - Jango",
+      "start": {
+        "date": "2015-03-26"
+      },
+      "end": {
+        "date": "2015-03-26"
+      }
+    },
+    {
+      "id": "g89dk9p8ddoo3pc5kqqnud23ik",
+      "status": "confirmed",
+      "summary": "Kuf @ Pinarella di cervia - Rock Planet w/ Fast Animals And Slow Kids",
+      "start": {
+        "date": "2015-03-28"
+      },
+      "end": {
+        "date": "2015-03-28"
+      }
+    },
+    {
+      "id": "99rdd3sbpmlvja4i07mbem653s",
+      "status": "confirmed",
+      "summary": "Kuf @ Ravenna - Artificierie Almagià w/ Vintage Violence",
+      "start": {
+        "date": "2015-04-03"
+      },
+      "end": {
+        "date": "2015-04-03"
+      }
+    },
+    {
+      "id": "kc5j84qid4gqr4j5i38ppp5ve4",
+      "status": "confirmed",
+      "summary": "Kuf @ Ravenna - Valtorto Arezzo Wave Fasi Finali",
+      "start": {
+        "date": "2015-04-15"
+      },
+      "end": {
+        "date": "2015-04-15"
+      }
+    },
+    {
+      "id": "nerf5j1agchjnshu49s0425ehk",
+      "status": "confirmed",
+      "summary": "Kuf @ Lugo - Cca Lughé",
+      "start": {
+        "date": "2015-05-01"
+      },
+      "end": {
+        "date": "2015-05-01"
+      }
+    },
+    {
+      "id": "4e945tot425p9gc6i11gbkko74",
+      "status": "confirmed",
+      "summary": "Kuf @ Treviso - Rumori Strani",
+      "start": {
+        "date": "2015-05-15"
+      },
+      "end": {
+        "date": "2015-05-15"
+      }
+    },
+    {
+      "id": "co40ta5pr38ikbjn81a9h1lj0k",
+      "status": "confirmed",
+      "summary": "Kuf @ Roma - Le Mura w/ (re)offender",
+      "start": {
+        "date": "2015-06-04"
+      },
+      "end": {
+        "date": "2015-06-04"
+      }
+    },
+    {
+      "id": "jomg8f66u89v2eusghk8qs5o1g",
+      "status": "confirmed",
+      "summary": "Kuf @ Cesena - Rock In Park",
+      "start": {
+        "date": "2015-06-16"
+      },
+      "end": {
+        "date": "2015-06-16"
+      }
+    },
+    {
+      "id": "t2g9s4cpcj286ompvomnkt9ngg",
+      "status": "confirmed",
+      "summary": "Kuf @ Ravenna - Circolo Black Sheep w/ Mercato del Vago",
+      "start": {
+        "date": "2015-06-27"
+      },
+      "end": {
+        "date": "2015-06-27"
+      }
+    },
+    {
+      "id": "1gcjhkue8f16oiv13365q2auas",
+      "status": "confirmed",
+      "summary": "Kuf @ Massa lombarda - Riot Fest",
+      "start": {
+        "date": "2015-07-10"
+      },
+      "end": {
+        "date": "2015-07-10"
+      }
+    },
+    {
+      "id": "8j195j5l18c50utmfqbg08a1h0",
+      "status": "confirmed",
+      "summary": "Kuf @ Ravenna - Darsena",
+      "start": {
+        "date": "2015-07-20"
+      },
+      "end": {
+        "date": "2015-07-20"
+      }
+    },
+    {
+      "id": "6joj3vfqv558d6q95gjp79a3lg",
+      "status": "confirmed",
+      "summary": "Kuf @ Solarolo - Solarrock",
+      "start": {
+        "date": "2015-07-25"
+      },
+      "end": {
+        "date": "2015-07-25"
+      }
+    },
+    {
+      "id": "v1lp9r2fh3dp507brr8jc1940k",
+      "status": "confirmed",
+      "summary": "Kuf @ Marina di Ravenna - Tav. Bukowsky w/ Babel",
+      "start": {
+        "date": "2015-08-30"
+      },
+      "end": {
+        "date": "2015-08-30"
+      }
+    },
+    {
+      "id": "eqes8dfolgba9dn7ffbqhpufmo",
+      "status": "confirmed",
+      "summary": "Kuf @ Ravenna - Festa dell'Unità w/ Linea 77",
+      "start": {
+        "date": "2015-09-04"
+      },
+      "end": {
+        "date": "2015-09-04"
+      }
+    },
+    {
+      "id": "muvgttrvth9ajstcpjrqnanu2k",
+      "status": "confirmed",
+      "summary": "Kuf @ Bomporto - La Botte",
+      "start": {
+        "date": "2015-09-12"
+      },
+      "end": {
+        "date": "2015-09-12"
+      }
+    },
+    {
+      "id": "9terkikf6hq833c88ea8of6h7g",
+      "status": "confirmed",
+      "summary": "Kuf @ Campiano - Primary",
+      "start": {
+        "date": "2015-10-07"
+      },
+      "end": {
+        "date": "2015-10-07"
+      }
+    },
+    {
+      "id": "0po7d06vseriejtndcd7p5a3i4",
+      "status": "confirmed",
+      "summary": "Kuf @ Lonato del Garda - Elixir Bar",
+      "start": {
+        "date": "2015-10-17"
+      },
+      "end": {
+        "date": "2015-10-17"
+      }
+    },
+    {
+      "id": "k7hci1t6ot3g9hpbmfu3ejg270",
+      "status": "confirmed",
+      "summary": "Kuf @ Santo Stefano - Diki Diki Cafè",
+      "start": {
+        "date": "2015-10-24"
+      },
+      "end": {
+        "date": "2015-10-24"
+      }
+    },
+    {
+      "id": "82er7vddpe7n0pl75apnh4lsr0",
+      "status": "confirmed",
+      "summary": "Kuf @ Forlì - L'Urlo",
+      "start": {
+        "date": "2015-11-13"
+      },
+      "end": {
+        "date": "2015-11-13"
+      }
+    },
+    {
+      "id": "mm1fo59e8jaf2sgmb1u7dfe568",
+      "status": "confirmed",
+      "summary": "Kuf @ Cesena - Bar Ronta",
+      "start": {
+        "date": "2015-12-23"
+      },
+      "end": {
+        "date": "2015-12-23"
+      }
+    },
+    {
+      "id": "4ik4s8uddl0rth1301msopnk08",
+      "status": "confirmed",
+      "summary": "Kuf @ Ravenna - Almagià",
+      "start": {
+        "date": "2016-03-26"
+      },
+      "end": {
+        "date": "2016-03-26"
+      }
+    },
+    {
+      "id": "dg1fjaoc1n8a323dkt87gt53vg",
+      "status": "confirmed",
+      "summary": "Kuf @ Lido Adriano - Cisim w/ SAID",
+      "location": "Cisim",
+      "start": {
+        "date": "2016-04-08"
+      },
+      "end": {
+        "date": "2016-04-08"
+      }
+    },
+    {
+      "id": "ethufvoau4p4ua3obbs5sbue8s",
+      "status": "confirmed",
+      "summary": "Kuf @ San Felice sul Panaro - Pasteggio a Livello w/ SAID",
+      "start": {
+        "date": "2016-05-27"
+      },
+      "end": {
+        "date": "2016-05-27"
+      }
+    },
+    {
+      "id": "qs2pt762ki0n15uc5djqnc8dd4",
+      "status": "confirmed",
+      "summary": "Kuf @ Modena - Stella Nera w/ SAID",
+      "start": {
+        "date": "2016-05-27"
+      },
+      "end": {
+        "date": "2016-05-27"
+      }
+    },
+    {
+      "id": "i77h6mckqfvf60b4g02bn23ci4",
+      "status": "confirmed",
+      "summary": "Kuf @ Marina di Ravenna - Hana-bi w/ Gazebo Penguins",
+      "location": "Hana-bi",
+      "start": {
+        "date": "2016-06-28"
+      },
+      "end": {
+        "date": "2016-06-28"
+      }
+    },
+    {
+      "id": "tr23lsqivv0lg7m9r39dmvv7j8",
+      "status": "confirmed",
+      "summary": "Kuf @ Marina di Ravenna - Dolce Lucia w/ Sunset Radio",
+      "start": {
+        "date": "2016-07-13"
+      },
+      "end": {
+        "date": "2016-07-13"
+      }
+    },
+    {
+      "id": "p6gggsv2vnp8cm70l9ee0ffsh4",
+      "status": "confirmed",
+      "summary": "Kuf @ Cesena - Rockin Park",
+      "start": {
+        "date": "2016-08-30"
+      },
+      "end": {
+        "date": "2016-08-30"
+      }
+    },
+    {
+      "id": "f5sfgouc29e74f8q3ejs2hbt28",
+      "status": "confirmed",
+      "summary": "Kuf @ Ferrara - Blackstar",
+      "start": {
+        "date": "2016-11-05"
+      },
+      "end": {
+        "date": "2016-11-05"
+      }
+    },
+    {
+      "id": "9grqcevai60vd2j9s39qkj7pj0",
+      "status": "confirmed",
+      "summary": "Kuf @ Prato - Riff Club",
+      "start": {
+        "date": "2016-11-19"
+      },
+      "end": {
+        "date": "2016-11-19"
+      }
+    },
+    {
+      "id": "b7akhnq6o5u3n1c85tjp5p1kao",
+      "status": "confirmed",
+      "summary": "Kuf @ Pratola Peligna - Garbage Live Club",
+      "location": "Garbage Live Club",
+      "start": {
+        "date": "2017-01-14"
+      },
+      "end": {
+        "date": "2017-01-15"
+      }
+    },
+    {
+      "id": "ko5p2g0pirv8fmic0n5cjrfu4k",
+      "status": "confirmed",
+      "summary": "Kuf @ Ravenna - Bronson w/ Gazebo Penguins",
+      "location": "Bronson",
+      "start": {
+        "date": "2017-04-16"
+      },
+      "end": {
+        "date": "2017-04-17"
+      }
+    },
+    {
+      "id": "fh803rbshu72dge260l3inh1og",
+      "status": "confirmed",
+      "summary": "Kuf @ Verona - Pitagora",
+      "location": "Verona, Via Veneto 13, 37060 Lugagnano, Verona (VR), Italy",
+      "start": {
+        "date": "2017-04-22"
+      },
+      "end": {
+        "date": "2017-04-23"
+      }
+    },
+    {
+      "id": "_68p38e9j8cr4aba574r38b9k88p3ib9p8cqj6ba46p1jaghg8co30g9j84",
+      "status": "confirmed",
+      "summary": "Kuf @ Bologna - Arteria",
+      "start": {
+        "date": "2017-04-26"
+      },
+      "end": {
+        "date": "2017-04-27"
+      }
+    },
+    {
+      "id": "prove-sala-esempio",
+      "status": "confirmed",
+      "summary": "Prove in sala",
+      "description": "nota interna",
+      "start": {
+        "date": "2017-05-06"
+      },
+      "end": {
+        "date": "2017-05-07"
+      }
+    },
+    {
+      "id": "_8ksk6ghl751k8b9g84sj0b9k8l0jib9p70p3ab9m60okcdpk8p33cga360",
+      "status": "confirmed",
+      "summary": "Kuf @ Cotignola - Beergarden",
+      "location": "Via Zanzi 63 48010 Cotignola Emilia-Romagna Italia",
+      "start": {
+        "date": "2017-05-26"
+      },
+      "end": {
+        "date": "2017-05-27"
+      }
+    },
+    {
+      "id": "1auneripsqga1umo3nilqh4j7o",
+      "status": "confirmed",
+      "summary": "Kuf @ Cotignola - Festa della Birra",
+      "location": "Cotignola",
+      "start": {
+        "date": "2017-07-01"
+      },
+      "end": {
+        "date": "2017-07-02"
+      }
+    },
+    {
+      "id": "lpg9bfur8l6nd65505rll32m3o",
+      "status": "confirmed",
+      "summary": "Kuf @ Longiano",
+      "location": "Piazza Tre Martiri",
+      "start": {
+        "date": "2017-07-24"
+      },
+      "end": {
+        "date": "2017-07-25"
+      }
+    },
+    {
+      "id": "4mcs61i09jej5kuuoohac0iu7g",
+      "status": "confirmed",
+      "summary": "Kuf @ Marina di Ravenna - Bukowsky",
+      "location": "Taverna Bukowski",
+      "start": {
+        "date": "2017-08-04"
+      },
+      "end": {
+        "date": "2017-08-05"
+      }
+    },
+    {
+      "id": "0kk1b7epegicl8c01bhupfjhsb",
+      "status": "confirmed",
+      "summary": "Kuf @ Cesena - Rockin Park",
+      "location": "Ippodromo Cesena",
+      "start": {
+        "date": "2017-09-19"
+      },
+      "end": {
+        "date": "2017-09-20"
+      }
+    },
+    {
+      "id": "_84s46hhg8d136b9l88ojib9k84r32ba16grjgb9m64ojcda36l2j4e9k88",
+      "status": "confirmed",
+      "summary": "Kuf @ Ravenna - JFK Festival",
+      "location": "Piazza Kennedy\nPiazza John Fitzgerald Kennedy 12, 48121 Ravenna, Italia",
+      "start": {
+        "dateTime": "2017-10-05T22:00:00+02:00",
+        "timeZone": "Europe/Rome"
+      },
+      "end": {
+        "dateTime": "2017-10-05T23:00:00+02:00",
+        "timeZone": "Europe/Rome"
+      }
+    },
+    {
+      "id": "7gk6vvfqq95jo8pmg3gmj1khsc",
+      "status": "confirmed",
+      "summary": "Kuf @ Ravenna - Almagià",
+      "location": "Artificerie Almagià",
+      "start": {
+        "date": "2017-12-15"
+      },
+      "end": {
+        "date": "2017-12-16"
+      }
+    },
+    {
+      "id": "_8koj4hi46sojaba58h2k8b9k8p0kcb9o6l0jaba66oo3cea56l0j0ghm60",
+      "status": "confirmed",
+      "summary": "annullato @ Vicenza - Bocciodromo",
+      "location": "Via Alessandro Rossi 198\nVicenza, Italia",
+      "start": {
+        "date": "2017-12-26"
+      },
+      "end": {
+        "date": "2017-12-27"
+      }
+    },
+    {
+      "id": "7onqg0a5q28i5hd8fdd2p6ru76",
+      "status": "confirmed",
+      "summary": "Kuf @ Bassano del Grappa - Terzo Ponte",
+      "location": "Terzo Ponte",
+      "start": {
+        "date": "2018-01-19"
+      },
+      "end": {
+        "date": "2018-01-20"
+      }
+    },
+    {
+      "id": "3mmos72fe40pl7gp87gi9gp1es",
+      "status": "confirmed",
+      "summary": "Kuf @ Fabriano - Il Corto Maltese",
+      "location": "Via Giuseppe Verdi, 7",
+      "start": {
+        "date": "2018-01-27"
+      },
+      "end": {
+        "date": "2018-01-28"
+      }
+    },
+    {
+      "id": "_6133cg9j8p0jab9p6oojab9k8d1k8b9p6cp4ab9j7134agpj8orjac1j6o",
+      "status": "confirmed",
+      "summary": "Kuf @ Ravenna - Sala Strocchi",
+      "location": "Via Maggiore 71\nRavenna, Italia",
+      "start": {
+        "date": "2018-02-23"
+      },
+      "end": {
+        "date": "2018-02-24"
+      }
+    },
+    {
+      "id": "_60ok8h1o852jab9i88o38b9k64qjaba288p3eb9p8co4cca58l33eh1m88",
+      "status": "confirmed",
+      "summary": "Kuf @ Ravenna - Fanti (acustico) w/ Sunset Radio",
+      "location": "I Fanti\nVia Manfredo Fanti 9/A, 48121 Ravenna, Italia",
+      "start": {
+        "date": "2018-03-17"
+      },
+      "end": {
+        "date": "2018-03-18"
+      }
+    },
+    {
+      "id": "_84p42dq46d236b9n8p2k6b9k64qj4ba26krjib9m6kojgea18cr4achh74",
+      "status": "confirmed",
+      "summary": "Kuf @ Cesena - Magazzino Parallelo Arezzo Wave",
+      "location": "Magazzino Parallelo\nVia Genova 70, 47521 Cesena, Forlì-Cesena, Italia",
+      "start": {
+        "date": "2018-05-02"
+      },
+      "end": {
+        "date": "2018-05-03"
+      }
+    },
+    {
+      "id": "4tdtp8dlh6lu5fk1go7os1f4r2",
+      "status": "confirmed",
+      "summary": "Kuf @ Civitella di Romagna - Mazapégul Brewpub",
+      "location": "Mazapégul Brewpub",
+      "start": {
+        "date": "2018-05-04"
+      },
+      "end": {
+        "date": "2018-05-05"
+      }
+    },
+    {
+      "id": "23jc0rkmblk74lfkdlpgta3grv",
+      "status": "confirmed",
+      "summary": "Kuf @ Maratona di Ravenna",
+      "location": "Ravenna",
+      "start": {
+        "dateTime": "2018-06-02T19:00:00+02:00",
+        "timeZone": "Europe/Rome"
+      },
+      "end": {
+        "dateTime": "2018-06-02T21:00:00+02:00",
+        "timeZone": "Europe/Rome"
+      }
+    },
+    {
+      "id": "00ec9t7fdu2j2pvca87m9aqhsi",
+      "status": "confirmed",
+      "summary": "Kuf @ Rockin' Park",
+      "location": "Ippodromo Cesena",
+      "start": {
+        "dateTime": "2018-06-12T22:00:00+02:00",
+        "timeZone": "Europe/Rome"
+      },
+      "end": {
+        "dateTime": "2018-06-12T23:00:00+02:00",
+        "timeZone": "Europe/Rome"
+      }
+    },
+    {
+      "id": "4c8ej44259om16u733j8at22cv",
+      "status": "confirmed",
+      "summary": "Kuf @ Roma - Yellow Square",
+      "location": "YellowSquare",
+      "start": {
+        "date": "2018-07-20"
+      },
+      "end": {
+        "date": "2018-07-21"
+      }
+    },
+    {
+      "id": "_6d34adhn6srj6b9i64r36b9k68rk4b9p84rjaba16csj8gpo8gr30c9l8o",
+      "status": "confirmed",
+      "summary": "Kuf @ Sant’Alberto - Santalbirra",
+      "location": "Sant'Alberto",
+      "start": {
+        "date": "2018-08-22"
+      },
+      "end": {
+        "date": "2018-08-23"
+      }
+    },
+    {
+      "id": "31l4nbebim8hcdptf67ci5dv2e",
+      "status": "confirmed",
+      "summary": "Kuf @ Riolo Terme w/ Zen Circus - Frogstock",
+      "location": "Frogstock Festival",
+      "start": {
+        "date": "2018-08-23"
+      },
+      "end": {
+        "date": "2018-08-24"
+      }
+    },
+    {
+      "id": "_6or4ad9h6gp42b9g6h0k4b9k6or42ba28p0j2ba584rkahi38l1jgdpg68",
+      "status": "confirmed",
+      "summary": "Kuf @ San Lorenzo - Festa della Birra",
+      "location": "Lugo",
+      "start": {
+        "date": "2018-08-30"
+      },
+      "end": {
+        "date": "2018-08-31"
+      }
+    },
+    {
+      "id": "1k5uk8n9qfmeeskob6jhoi1kqc",
+      "status": "confirmed",
+      "summary": "Kuf @ Cesena - Frutipapalina",
+      "start": {
+        "date": "2018-09-16"
+      },
+      "end": {
+        "date": "2018-09-17"
+      }
+    },
+    {
+      "id": "66nottk86o0v7sskjo11emfc52",
+      "status": "confirmed",
+      "summary": "Kuf @ Ravenna - Bronson w/ Sunset Radio",
+      "location": "Bronson Club",
+      "start": {
+        "date": "2018-10-31"
+      },
+      "end": {
+        "date": "2018-11-01"
+      }
+    },
+    {
+      "id": "0bs80j3fucghme6li3l7ufso84",
+      "status": "confirmed",
+      "summary": "Kuf @ Ravenna - Almagià",
+      "location": "Almagià",
+      "start": {
+        "date": "2018-11-15"
+      },
+      "end": {
+        "date": "2018-11-16"
+      }
+    },
+    {
+      "id": "_8kq38d2284s44ba5690jcb9k6l1k4ba26gojcb9j8ko3gga56sqjeha38k",
+      "status": "confirmed",
+      "summary": "Kuf @ Cesena - Riot Caffè ",
+      "location": "Via Cervese, 2548, 47521 Cesena FC, Italy ",
+      "start": {
+        "date": "2019-01-04"
+      },
+      "end": {
+        "date": "2019-01-05"
+      }
+    },
+    {
+      "id": "_8l23ihhm84rj6ba66oqkab9k712jaba26so3ab9p6gpj6ea36ss32di284",
+      "status": "confirmed",
+      "summary": "Kuf @ Ravenna - Bronson per Freschissimo",
+      "location": "Bronson\nVia Cella 50, 48124 Madonna dell'Albero, Province of Ravenna, Italy",
+      "start": {
+        "dateTime": "2019-03-28T21:00:00+01:00",
+        "timeZone": "Europe/Rome"
+      },
+      "end": {
+        "dateTime": "2019-03-28T22:00:00+01:00",
+        "timeZone": "Europe/Rome"
+      }
+    },
+    {
+      "id": "3rnisrvmqpf7ip08re0aihn61l",
+      "status": "confirmed",
+      "summary": "Kuf @ Castel S.Pietro Terme - per Ganesh Festival",
+      "location": "Parco Lungo Sillaro, Viale Terme, 40024 Castel San Pietro Terme BO, Italia",
+      "start": {
+        "date": "2019-06-18"
+      },
+      "end": {
+        "date": "2019-06-19"
+      }
+    },
+    {
+      "id": "_88s38d9i8crkab9i8d2k2b9k68o32b9p6cp36b9h852jaca48p338dhl70",
+      "status": "confirmed",
+      "summary": "Kuf @ Castel S.Pietro Terme - Indigest",
+      "location": "Parco Lungo Sillaro, Viale Terme, 40024 Castel San Pietro Terme BO, Italia",
+      "start": {
+        "date": "2019-07-14"
+      },
+      "end": {
+        "date": "2019-07-15"
+      }
+    },
+    {
+      "id": "1n4go6aq3lj01ggqrsnkgmj55r",
+      "status": "confirmed",
+      "summary": "Kuf @ Marina di Ravenna - Mosquito w/ Melody Fall e Sunset Radio",
+      "location": "Bagno Mosquito",
+      "start": {
+        "date": "2019-08-18"
+      },
+      "end": {
+        "date": "2019-08-19"
+      }
+    },
+    {
+      "id": "_8h1jce2264r44b9m8or44b9k8kokab9o8kpjaba66oq38c226t14ce2564",
+      "status": "confirmed",
+      "summary": "Kuf @ San Lorenzo - Festa della birra",
+      "location": "San Lorenzo",
+      "start": {
+        "date": "2019-08-29"
+      },
+      "end": {
+        "date": "2019-08-30"
+      }
+    },
+    {
+      "id": "_6ss4aha164ok4b9p74p48b9k8kp30b9p88o3gb9j88qjed1i60sj0c1p74",
+      "status": "confirmed",
+      "summary": "Kuf @ Casola Valsenio",
+      "location": "Casola Valsenio",
+      "start": {
+        "date": "2019-09-01"
+      },
+      "end": {
+        "date": "2019-09-02"
+      }
+    },
+    {
+      "id": "_60o30di48h0k8ba16l2j6b9k6go3cba1750j6b9p70rjcha36cqjcdpp84",
+      "status": "confirmed",
+      "summary": "Kuf @ Ravenna - Notte d’oro",
+      "location": "Piazza del Popolo\nRavenna, Provincia di Ravenna, Italia",
+      "start": {
+        "date": "2019-10-05"
+      },
+      "end": {
+        "date": "2019-10-06"
+      }
+    },
+    {
+      "id": "_852k2e238gsj0b9l68q46b9k8osk6b9o70pk4b9j6ooj4hi385244c1m6s",
+      "status": "confirmed",
+      "summary": "Kuf @ Cesena - Riot Caffè",
+      "location": "Riot Caffé, Via Cervese, 2548, 47521 Cesena FC, Italia  ",
+      "start": {
+        "date": "2021-07-13"
+      },
+      "end": {
+        "date": "2021-07-14"
+      }
+    },
+    {
+      "id": "_84sjic2374r3ib9o691jgb9k8osjab9o6p2kab9n8grjee1g7513aha28c",
+      "status": "confirmed",
+      "summary": "Kuf @ Ravenna - Aquolina Bistrot",
+      "location": "Via Travaglini, 14, Ravenna",
+      "start": {
+        "date": "2021-09-18"
+      },
+      "end": {
+        "date": "2021-09-19"
+      }
+    },
+    {
+      "id": "3mmm6ugvqdjd5t0kkrr7etc1fs",
+      "status": "confirmed",
+      "summary": "Kuf @ Ravenna - Around The Rock Artificierie Almagià",
+      "location": "Via dell' Almagià",
+      "start": {
+        "date": "2022-04-23"
+      },
+      "end": {
+        "date": "2022-04-24"
+      }
+    },
+    {
+      "id": "12lkc5riv5hvc0ndrs45duupec",
+      "status": "confirmed",
+      "summary": "Kuf @ Around the Rock summer edition vol.1",
+      "location": "CISIM",
+      "start": {
+        "dateTime": "2022-07-11T21:00:00+02:00",
+        "timeZone": "Europe/Rome"
+      },
+      "end": {
+        "dateTime": "2022-07-12T00:00:00+02:00",
+        "timeZone": "Europe/Rome"
+      }
+    },
+    {
+      "id": "117k4eil5e8o57l3brgbiag0kv",
+      "status": "confirmed",
+      "summary": "Kuf @ Marina di Ravenna - Marinamore",
+      "location": "Bagno marinamore",
+      "start": {
+        "date": "2022-08-14"
+      },
+      "end": {
+        "date": "2022-08-15"
+      }
+    },
+    {
+      "id": "_6l1jehhk6cp30b9o8p13ib9k74p36ba18d130ba3612jcdi56sq3ahhn74",
+      "status": "confirmed",
+      "summary": "Kuf @ Marina di Ravenna - Finisterre w/ Atlante",
+      "location": "Finisterre Beach\nViale delle Nazioni 242C - Bagno 28, 48122 Marina di Ravenna, Ravenna, Italia",
+      "start": {
+        "date": "2022-08-26"
+      },
+      "end": {
+        "date": "2022-08-27"
+      }
+    },
+    {
+      "id": "_6gpkagpp68pjab9k6crjib9k6cr30b9p69344ba66h338gpg8gq4ah2460",
+      "status": "confirmed",
+      "summary": "Kuf @ CISIM w/ Pierpaolo Capovilla e i Cattivi Maestri",
+      "location": "CISIM",
+      "start": {
+        "dateTime": "2022-10-28T21:00:00+02:00",
+        "timeZone": "Europe/Rome"
+      },
+      "end": {
+        "dateTime": "2022-10-28T23:45:00+02:00",
+        "timeZone": "Europe/Rome"
+      }
+    },
+    {
+      "id": "_6kqk8gpg64s3eb9l88pk6b9k6sp3eba18oqj6b9l8ks3cghg6533gh1l6c",
+      "status": "confirmed",
+      "summary": "Kuf @ Ravenna - Almagià ",
+      "location": "Artificerie Almagià\nVia dell'Almagià 2, 48122 Ravenna, Italia",
+      "start": {
+        "date": "2023-04-13"
+      },
+      "end": {
+        "date": "2023-04-14"
+      }
+    },
+    {
+      "id": "_6l2kcg9m8cpkcba560rkab9k70rj2b9o70sj4b9o8l130hi388qk4c1o64",
+      "status": "confirmed",
+      "summary": "Kuf @ Massa lombarda - JYL",
+      "start": {
+        "date": "2023-07-26"
+      },
+      "end": {
+        "date": "2023-07-27"
+      }
+    },
+    {
+      "id": "_8l0j6c9j6923ab9j65246b9k6p0kcb9o70q38b9j6123cca2712j0c1k6o",
+      "status": "confirmed",
+      "summary": "Kuf @ Marina di Ravenna - Marinamore",
+      "location": "Bagno marinamore, Viale delle Nazioni, 408/424, 48122 Ravenna RA, Italia",
+      "start": {
+        "date": "2023-08-18"
+      },
+      "end": {
+        "date": "2023-08-19"
+      }
+    },
+    {
+      "id": "_6d244ghp851kab9g6sr46b9k64ojcba18cp3aba48gr30cpm8gq4ah1g64",
+      "status": "confirmed",
+      "summary": "Kuf @ Marina di Ravenna - Marinamore",
+      "location": "Bagno marinamore, Viale delle Nazioni, 408/424, 48122 Ravenna RA, Italia",
+      "start": {
+        "date": "2024-06-20"
+      },
+      "end": {
+        "date": "2024-06-21"
+      }
+    },
+    {
+      "id": "_6l14ccq36crjab9m85348b9k6spk4ba18opj4b9m6ksk4e1k74pjae9k6s",
+      "status": "confirmed",
+      "summary": "Kuf @ Marina di Ravenna - Mosquito",
+      "start": {
+        "date": "2025-08-31"
+      },
+      "end": {
+        "date": "2025-09-01"
+      }
+    },
+    {
+      "id": "_8kq3ce9g65134b9h8p0jeb9k64pk6b9p8d0jeb9i6ssjegq270s3ic1n6k",
+      "status": "confirmed",
+      "summary": "Kuf @ Ravenna - Around The Rock Artificierie Almagià",
+      "location": "Via dell' Almagià, 48122 Ravenna RA, Italia",
+      "start": {
+        "date": "2026-03-21"
+      },
+      "end": {
+        "date": "2026-03-22"
+      }
+    },
+    {
+      "id": "_890kcd238opkab9k8osj0b9k6srjiba168o44b9o70s32chp8d14ae1h6o",
+      "status": "confirmed",
+      "summary": "Kuf @ Lido Adriano - Cisim",
+      "location": "Cisim, Viale Giuseppe Parini, 48, 48122 Lido Adriano RA, Italia",
+      "start": {
+        "date": "2026-11-01"
+      },
+      "end": {
+        "date": "2026-11-02"
+      }
+    },
+    {
+      "id": "esempio-cancellato",
+      "status": "cancelled",
+      "summary": "Kuf @ Lugo - Lughé (esempio annullato)",
+      "start": {
+        "date": "2030-05-01"
+      },
+      "end": {
+        "date": "2030-05-02"
+      }
+    },
+    {
+      "id": "esempio-futuro-1",
+      "status": "confirmed",
+      "summary": "Kuf @ Ravenna - Almagià w/ Gli Ospiti (esempio)",
+      "location": "Artificerie Almagià\nVia dell'Almagià 2, 48122 Ravenna RA, Italia",
+      "description": "Evento d'esempio per lo sviluppo locale.\nlink: Biglietti | https://example.com/biglietti\nlink: https://example.com/evento\nNota privata: cachet da definire, NON PUBBLICARE",
+      "start": {
+        "dateTime": "2030-06-14T21:30:00+02:00",
+        "timeZone": "Europe/Rome"
+      },
+      "end": {
+        "dateTime": "2030-06-14T23:30:00+02:00",
+        "timeZone": "Europe/Rome"
+      }
+    },
+    {
+      "id": "esempio-futuro-2",
+      "status": "confirmed",
+      "summary": "Kuf @ Marina di Ravenna - Hana-bi (esempio)",
+      "location": "Hana-bi, Viale delle Nazioni 2, 48122 Marina di Ravenna RA, Italia",
+      "start": {
+        "date": "2030-07-04"
+      },
+      "end": {
+        "date": "2030-07-05"
+      }
+    },
+    {
+      "id": "esempio-futuro-3",
+      "status": "confirmed",
+      "summary": "Kuf @ Bologna - Freak Out (esempio)",
+      "location": "Freak Out, Via Emilio Zago 7/b, 40128 Bologna BO, Italia",
+      "description": "foto: https://example.com/foto-1.jpg\nfoto: https://example.com/foto-2.jpg",
+      "start": {
+        "dateTime": "2030-10-26T23:00:00+02:00",
+        "timeZone": "Europe/Rome"
+      },
+      "end": {
+        "dateTime": "2030-10-27T01:30:00+02:00",
+        "timeZone": "Europe/Rome"
+      }
+    }
+  ]
+}

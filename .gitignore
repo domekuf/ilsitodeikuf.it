@@ -20,6 +20,10 @@ node_modules/
 *.pem
 **/client_secret*.json
 **/credential*.json
+# chiavi JSON dei service account Google (es. ilsitodeikuf-1a2b3c4d5e6f.json scaricata dalla console)
+/ilsitodeikuf-*.json
+**/*service-account*.json
+**/*-sa-key*.json
 
 # test
 playwright-report/

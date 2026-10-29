@@ -1,0 +1,96 @@
+---
+// Player Spotify con facade (§7.1). L'iframe di Spotify porta con sé i suoi cookie e tracker:
+// lo carichiamo solo quando lo si chiede, così la home non manda niente a Spotify (e niente banner).
+import Icon from '~/components/ui/Icon.astro';
+
+interface Props {
+  artistId: string;
+  url: string;
+}
+
+const { artistId, url } = Astro.props;
+const src = `https://open.spotify.com/embed/artist/${artistId}?theme=0`;
+---
+
+<div class="spotify" data-spotify={src}>
+  <div class="spotify__facade">
+    <Icon name="spotify" size={36} />
+    <p class="max-w-sm text-sm text-warm-ink">
+      Il player arriva da Spotify, che usa i suoi cookie: lo carichiamo solo se lo chiedi.
+    </p>
+    <div class="flex flex-wrap justify-center gap-3">
+      <button type="button" class="spotify__load" data-spotify-load>
+        Carica il player
+      </button>
+      <a href={url} target="_blank" rel="noopener" class="spotify__link">
+        Apri Spotify <Icon name="external-link" size={14} />
+      </a>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('click', (e) => {
+    const button = (e.target as Element).closest('[data-spotify-load]');
+    const box = button?.closest<HTMLElement>('[data-spotify]');
+    if (!box) return;
+    const iframe = document.createElement('iframe');
+    iframe.src = box.dataset['spotify'] ?? '';
+    iframe.title = 'Kuf su Spotify';
+    iframe.loading = 'lazy';
+    iframe.allow = 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';
+    box.replaceChildren(iframe);
+    iframe.focus();
+  });
+</script>
+
+<style>
+  .spotify {
+    height: 352px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid var(--color-line);
+    background: var(--color-surface);
+  }
+  .spotify :global(iframe) {
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  .spotify__facade {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1.5rem;
+    text-align: center;
+  }
+  .spotify__load {
+    min-height: 2.75rem;
+    padding: 0 1.25rem;
+    border-radius: 999px;
+    background: var(--color-ink);
+    color: var(--color-paper);
+    font-size: 0.8125rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: background-color var(--duration-fast) var(--ease-soft);
+  }
+  .spotify__load:hover {
+    background: #1ed760;
+    color: var(--color-ink);
+  }
+  .spotify__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-height: 2.75rem;
+    font-size: 0.8125rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: underline;
+    text-underline-offset: 5px;
+  }
+</style>

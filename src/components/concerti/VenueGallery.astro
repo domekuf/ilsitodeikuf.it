@@ -1,0 +1,104 @@
+---
+// Foto della venue (§7.3). Niente immagini di ripiego: o foto vere, o niente.
+// - `foto:` nella descrizione dell'evento: le foto sono già nell'HTML.
+// - altrimenti la galleria parte nascosta; quando la modale si apre, src/scripts/concerti.ts chiede
+//   /api/venue-photos e la mostra solo se Google ha delle foto (con le attribuzioni). Senza foto
+//   o senza JavaScript, non si vede niente.
+import { PHOTOS_PER_VENUE } from '~/lib/places';
+
+interface Props {
+  slug: string;
+  venue: string;
+  /** foto dalla descrizione dell'evento (`foto:`) */
+  photos?: string[] | undefined;
+}
+
+const { slug, venue, photos = [] } = Astro.props;
+const fixed = photos.slice(0, PHOTOS_PER_VENUE);
+// slot vuoti da riempire via JS (servono gli attributi degli stili scoped di Astro)
+const slots = fixed.length ? fixed : Array.from({ length: PHOTOS_PER_VENUE }, () => '');
+---
+
+<figure
+  class="venue-gallery"
+  data-venue-gallery
+  data-slug={slug}
+  data-venue={venue}
+  data-pending={fixed.length ? undefined : ''}
+  hidden={!fixed.length}
+>
+  <ul class="venue-gallery__track" aria-label={`Foto: ${venue}`} tabindex="0">
+    {slots.map((src, i) => (
+      <li class="venue-gallery__item">
+        <img
+          src={src || undefined}
+          alt={src ? `${venue}: foto ${i + 1}` : ''}
+          loading="lazy"
+          decoding="async"
+          referrerpolicy="no-referrer"
+        />
+      </li>
+    ))}
+  </ul>
+  <figcaption class="venue-gallery__credits" data-credits></figcaption>
+</figure>
+
+<style>
+  .venue-gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .venue-gallery__track {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: 82%;
+    gap: 0.5rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+    border-radius: var(--radius-card);
+  }
+  .venue-gallery__track::-webkit-scrollbar {
+    display: none;
+  }
+  .venue-gallery__track:focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+  }
+  .venue-gallery__item {
+    scroll-snap-align: start;
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+    border-radius: var(--radius-card);
+    background: rgb(20 20 20 / 0.06);
+  }
+  .venue-gallery__item :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: opacity var(--duration-slow) var(--ease-soft);
+  }
+  .venue-gallery__credits {
+    font-size: 0.75rem;
+    color: var(--color-warm-ink);
+  }
+  .venue-gallery__credits :global(a) {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .venue-gallery[hidden] {
+    display: none;
+  }
+  .venue-gallery__credits:empty {
+    display: none;
+  }
+  @media (min-width: 768px) {
+    .venue-gallery__track {
+      grid-auto-columns: 1fr;
+      overflow: visible;
+    }
+  }
+</style>

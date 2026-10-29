@@ -1,4 +1,5 @@
 // @ts-check
+import { createHash } from 'node:crypto';
 import { defineConfig, envField, fontProviders } from 'astro/config';
 import cloudflare from '@astrojs/cloudflare';
 import tailwindcss from '@tailwindcss/vite';
@@ -23,6 +24,10 @@ function styleguide() {
   };
 }
 
+import { DOCK_SEEN_SCRIPT } from './src/lib/inline-scripts.mjs';
+
+const sha256 = (text) => `sha256-${createHash('sha256').update(text).digest('base64')}`;
+
 // https://docs.astro.build/en/reference/configuration-reference/
 export default defineConfig({
   site: 'https://ilsitodeikuf.it',
@@ -30,7 +35,8 @@ export default defineConfig({
   output: 'static',
   trailingSlash: 'never',
   // /contattaci.html invece di /contattaci/index.html: niente redirect con lo slash finale
-  build: { format: 'file' },
+  // CSS inline in ogni pagina: ~10 KB gzip, una richiesta bloccante in meno (ADR-057)
+  build: { format: 'file', inlineStylesheets: 'always' },
 
   adapter: cloudflare({
     // ADR-006: immagini ottimizzate in build, nessuna trasformazione a runtime.
@@ -39,15 +45,64 @@ export default defineConfig({
 
   integrations: [styleguide()],
 
+  // Niente blocchi di codice nei contenuti: Shiki userebbe stili inline, incompatibili con la CSP.
+  markdown: { syntaxHighlight: false },
+
+  // CSP (§8.4, ADR-060): Astro mette in ogni pagina un <meta> con gli hash di script e stili suoi.
+  // Le direttive che il <meta> non supporta (frame-ancestors) arrivano come header (public/_headers e
+  // src/middleware.ts). Nessuno stile inline negli attributi: solo classi.
+  security: {
+    csp: {
+      directives: [
+        "default-src 'self'",
+        // foto delle venue (Google) e quelle indicate a mano con `foto:` (qualsiasi https)
+        "img-src 'self' data: https:",
+        "font-src 'self'",
+        // beacon di Cloudflare Web Analytics
+        "connect-src 'self' https://cloudflareinsights.com",
+        // embed caricati solo al clic + widget Turnstile
+        'frame-src https://www.youtube-nocookie.com https://open.spotify.com https://www.google.com https://challenges.cloudflare.com',
+        "media-src 'self'",
+        "manifest-src 'self'",
+        "object-src 'none'",
+        "base-uri 'self'",
+        "form-action 'self'",
+        'upgrade-insecure-requests',
+      ],
+      scriptDirective: {
+        // gli script is:inline scritti a mano non li hasha Astro: lo facciamo noi
+        hashes: [sha256(DOCK_SEEN_SCRIPT)],
+        resources: ["'self'", 'https://challenges.cloudflare.com', 'https://static.cloudflareinsights.com'],
+      },
+      styleDirective: { resources: ["'self'"] },
+    },
+  },
+
+  // Redirect 301 dai vecchi URL (§7.11). /download.php dipende dalla query: è in src/pages/download.php.ts.
+  redirects: {
+    '/index.php': { status: 301, destination: '/' },
+    '/via-trieste.php': { status: 301, destination: '/via-trieste' },
+    '/concerti.php': { status: 301, destination: '/concerti' },
+    '/magliette.php': { status: 301, destination: '/articoli' },
+    '/contatti.php': { status: 301, destination: '/contattaci' },
+    '/press.php': { status: 301, destination: '/press' },
+    '/public/Pigna.zip': { status: 301, destination: '/pigna' },
+    '/public/ViaTrieste.zip': { status: 301, destination: '/via-trieste' },
+    '/public/scheda-tecnica.pdf': { status: 301, destination: '/press/scheda-tecnica.pdf' },
+    '/public/stage-plan.pdf': { status: 301, destination: '/press/stage-plan.pdf' },
+    '/public/lista-canali.pdf': { status: 301, destination: '/press' },
+  },
+
   // ADR-009: font self-hosted con la Fonts API (preload e fallback con metriche corrette).
   fonts: [
     {
       provider: fontProviders.local(),
-      name: 'Walkway',
-      cssVariable: '--font-walkway',
+      // Titoli: Montserrat Light (OFL) al posto di Walkway, che non ha una licenza (ADR-031).
+      name: 'Montserrat',
+      cssVariable: '--font-montserrat',
       fallbacks: ['sans-serif'],
       options: {
-        variants: [{ src: ['./src/assets/fonts/walkway-bold.woff2'], weight: 700, style: 'normal' }],
+        variants: [{ src: ['./src/assets/fonts/montserrat-light.woff2'], weight: 300, style: 'normal' }],
       },
     },
     {
@@ -95,7 +150,8 @@ export default defineConfig({
         // Chiave di test ufficiale: passa sempre.
         default: '1x00000000000000000000AA',
       }),
-      PUBLIC_GOOGLE_MAPS_EMBED_KEY: envField.string({ context: 'client', access: 'public', optional: true }),
+      // letta a runtime dal server (il dettaglio concerti è SSR): funziona da .dev.vars e da wrangler.jsonc → vars
+      GOOGLE_MAPS_EMBED_KEY: envField.string({ context: 'server', access: 'public', optional: true }),
 
       GOOGLE_SA_EMAIL: envField.string({ context: 'server', access: 'secret', optional: true }),
       GOOGLE_SA_PRIVATE_KEY: envField.string({ context: 'server', access: 'secret', optional: true }),

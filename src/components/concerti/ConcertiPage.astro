@@ -1,0 +1,149 @@
+---
+// /concerti e /concerti/[slug] (§7.2, §7.3): la lista e, all'accesso diretto, la modale già aperta.
+// Dalla lista il dettaglio arriva con un fetch di /concerti/[slug] (modal-router).
+import Modal from '~/components/ui/Modal.astro';
+import SectionTitle from '~/components/ui/SectionTitle.astro';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import { groupByYear, splitConcerts, type Concert, type ConcertsResult } from '~/lib/calendar';
+import { formatShortDate, romeDate } from '~/lib/dates';
+import { concertJsonLd, safeJson } from '~/lib/jsonld';
+import { SITE } from '~/lib/site';
+import ConcertDetail from './ConcertDetail.astro';
+import ConcertItem from './ConcertItem.astro';
+
+interface Props {
+  result: ConcertsResult;
+  open?: Concert | undefined;
+}
+
+const { result, open } = Astro.props;
+const { upcoming, past } = splitConcerts(result.concerts);
+const years = groupByYear(past);
+const currentYear = Number(romeDate(new Date()).slice(0, 4));
+const openYear = years.some((y) => y.year === currentYear) ? currentYear : years[0]?.year;
+const nextSlug = upcoming[0]?.slug;
+
+const listTitle = `Concerti · ${SITE.name}`;
+const detailTitle = (c: Concert) => `${c.venue}, ${formatShortDate(c.start)} · Concerti · ${SITE.name}`;
+const description = open
+  ? `I Kuf ${open.status === 'upcoming' ? 'suonano' : 'hanno suonato'} a ${open.venue}${open.city ? `, ${open.city}` : ''}: ${formatShortDate(open.start)}.`
+  : 'Dove suonano i Kuf: i concerti in programma e quelli passati.';
+const jsonLd = upcoming.map((c) => concertJsonLd(c, new URL(`/concerti/${c.slug}`, Astro.site).href));
+---
+
+<BaseLayout
+  title={open ? detailTitle(open) : listTitle}
+  description={description}
+  image={new URL('/og/concerti.jpg', Astro.site).href}
+>
+  {jsonLd.length > 0 && <script slot="head" type="application/ld+json" set:html={safeJson(jsonLd)} />}
+
+  <div class="mx-auto flex max-w-3xl flex-col gap-14 px-5 py-14 sm:px-8 sm:py-20">
+    <SectionTitle level={1} title="Concerti" subtitle="Per sentire i Kuf" />
+
+    {result.error && (
+      <p class="surface p-6 text-center" role="status">
+        Il calendario dei concerti oggi non risponde. Riprova tra un po’, oppure guarda su{' '}
+        <a
+          class="underline underline-offset-4"
+          href={SITE.social.find((s) => s.id === 'instagram')?.url}
+          rel="noopener"
+        >
+          Instagram
+        </a>
+        .
+      </p>
+    )}
+    {result.outdated && (
+      <p class="text-center text-sm text-warm-ink" role="status">
+        Il calendario non risponde da un po’: potrebbe mancare qualche data nuova.
+      </p>
+    )}
+
+    {!result.error && (
+      <section class="flex flex-col gap-5" aria-labelledby="in-programma">
+        <h2 id="in-programma" class="eyebrow">
+          In programma
+        </h2>
+        {upcoming.length > 0 ? (
+          <ul class="flex flex-col">
+            {upcoming.map((c, i) => (
+              <li>
+                <ConcertItem concert={c} featured={i === 0} />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p class="surface p-6 text-center text-lg">
+            Nessun concerto in programma. <span class="whitespace-nowrap">Ci vediamo a natale.</span>
+          </p>
+        )}
+      </section>
+    )}
+
+    {years.length > 0 && (
+      <section class="flex flex-col gap-5" aria-labelledby="passati">
+        <h2 id="passati" class="eyebrow">
+          Passati
+        </h2>
+        <div class="flex flex-col">
+          {years.map((group) => (
+            <details class="year group" open={group.year === openYear}>
+              <summary class="year__summary">
+                <span class="title-display text-2xl">{group.year}</span>
+                <span class="ml-auto text-sm text-warm-ink">
+                  {group.concerts.length === 1 ? '1 concerto' : `${group.concerts.length} concerti`}
+                </span>
+              </summary>
+              <ul class="flex flex-col pb-4">
+                {group.concerts.map((c) => (
+                  <li>
+                    <ConcertItem concert={c} />
+                  </li>
+                ))}
+              </ul>
+            </details>
+          ))}
+        </div>
+      </section>
+    )}
+  </div>
+
+  <Modal slot="modals" id="concerto" size="lg" listUrl="/concerti" listTitle={listTitle} open={Boolean(open)}>
+    {open && <ConcertDetail concert={open} next={open.slug === nextSlug} />}
+  </Modal>
+</BaseLayout>
+
+<script>
+  import { initConcerti } from '~/scripts/concerti';
+  initConcerti();
+</script>
+
+<style>
+  .year {
+    border-top: 1px solid var(--color-line);
+  }
+  .year__summary {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 1rem 0.25rem;
+    cursor: pointer;
+    list-style: none;
+  }
+  .year__summary::-webkit-details-marker {
+    display: none;
+  }
+  .year__summary::after {
+    content: '+';
+    font-size: 1.25rem;
+    color: var(--color-warm-ink);
+  }
+  .year[open] > .year__summary::after {
+    content: '–';
+  }
+  .year__summary:focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+  }
+</style>

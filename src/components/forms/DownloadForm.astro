@@ -1,0 +1,85 @@
+---
+// Form di download dei dischi (§6.3). Invio con l'Action `richiestaDownload`:
+// salva su D1, avvisa la band, manda il ringraziamento con il link (7 giorni) e avvia il download.
+import Button from '~/components/ui/Button.astro';
+import Icon from '~/components/ui/Icon.astro';
+import { SITE } from '~/lib/site';
+import ConsentCheckbox from './ConsentCheckbox.astro';
+import Turnstile from './Turnstile.astro';
+
+interface Props {
+  album: 'pigna' | 'via-trieste';
+  titolo: string;
+}
+
+const { album, titolo } = Astro.props;
+const id = (name: string) => `dl-${name}`;
+---
+
+<form class="flex flex-col gap-5" method="post" novalidate data-form="download">
+  <input type="hidden" name="album" value={album} />
+  <input type="hidden" name="page" value="" />
+  <div>
+    <h2 class="title-display text-2xl">Scarica {titolo}</h2>
+    <p class="mt-2 text-warm-ink">È gratis. Lasciaci nome ed email: ci terremo in contatto solo se vorrai.</p>
+  </div>
+  <div class="grid gap-5 sm:grid-cols-2">
+    <div class="field">
+      <label for={id('name')} class="field__label">
+        Nome
+      </label>
+      <input
+        id={id('name')}
+        name="name"
+        class="field__control"
+        autocomplete="name"
+        required
+        maxlength="100"
+      />
+    </div>
+    <div class="field">
+      <label for={id('email')} class="field__label">
+        Email
+      </label>
+      <input
+        id={id('email')}
+        name="email"
+        type="email"
+        class="field__control"
+        autocomplete="email"
+        inputmode="email"
+        required
+        maxlength="200"
+      />
+    </div>
+  </div>
+  <div class="field">
+    <label for={id('message')} class="field__label">
+      Messaggio <span class="font-normal text-warm-ink">(facoltativo)</span>
+    </label>
+    <textarea id={id('message')} name="message" class="field__control" maxlength="5000"></textarea>
+  </div>
+  <div class="visually-hidden" aria-hidden="true">
+    <label for={id('website')}>Lascia vuoto</label>
+    <input id={id('website')} name="website" tabindex="-1" autocomplete="off" />
+  </div>
+  <ConsentCheckbox idPrefix="dl" purpose="download" />
+  <Turnstile />
+  <div class="flex flex-col gap-3">
+    <div>
+      <Button type="submit">
+        <Icon name="download" size={18} /> <span data-label="Scarica il disco">Scarica il disco</span>
+      </Button>
+    </div>
+    <p class="form-status text-sm" role="status" aria-live="polite" data-form-status></p>
+    <a href="#" class="text-sm underline underline-offset-4" data-download-link hidden>
+      Se il download non parte, clicca qui.
+    </a>
+    <noscript>
+      <p class="text-sm text-warm-ink">
+        Per scaricare il disco serve JavaScript (ci protegge dallo spam). Scrivici a {SITE.email} e te lo
+        mandiamo noi.
+      </p>
+    </noscript>
+  </div>
+</form>

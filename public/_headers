@@ -1,0 +1,18 @@
+# Header di sicurezza per tutte le pagine statiche e gli asset (§8.4).
+# Devono restare uguali a src/lib/security-headers.ts (c'è un test).
+/*
+  Content-Security-Policy: frame-ancestors 'none'; object-src 'none'; base-uri 'self'
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()
+  Cross-Origin-Opener-Policy: same-origin
+  Strict-Transport-Security: max-age=31536000
+
+# File del press kit: si scaricano con un nome pulito (§7.9)
+/press/scheda-tecnica.pdf
+  Content-Disposition: attachment; filename="Kuf - Scheda tecnica.pdf"
+/press/stage-plan.pdf
+  Content-Disposition: attachment; filename="Kuf - Stage plan.pdf"
+/press/kuf-loghi.zip
+  Content-Disposition: attachment; filename="Kuf - Loghi.zip"

@@ -1,17 +1,226 @@
 ---
-// Home provvisoria: la home vera ("Il foglio dei Kuf") arriva in Fase 6.
+// Home: "Il foglio dei Kuf" (§7.1). Pagina statica; l'unica parte dinamica è il prossimo concerto
+// (server island). Ordine: hero, prossimo concerto, dischi, cose vere, articoli, ascolta.
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
 import Wordmark from '~/assets/logo/kuf-wordmark.svg';
+import bandPhoto from '~/assets/band/kuf-gruppo.jpg';
+import KufFacts from '~/components/home/KufFacts.astro';
+import NextConcert from '~/components/home/NextConcert.astro';
+import NextConcertSkeleton from '~/components/home/NextConcertSkeleton.astro';
+import SpotifyEmbed from '~/components/home/SpotifyEmbed.astro';
+import Icon from '~/components/ui/Icon.astro';
+import SectionTitle from '~/components/ui/SectionTitle.astro';
 import BaseLayout from '~/layouts/BaseLayout.astro';
+import { safeJson } from '~/lib/jsonld';
 import { SITE } from '~/lib/site';
+import press from '~/content/press.json';
+
+const albums = (await getCollection('albums')).sort((a, b) => a.data.ordine - b.data.ordine);
+const articoli = (await getCollection('articoli'))
+  .filter((a) => a.data.disponibile)
+  .sort((a, b) => a.data.ordine - b.data.ordine)
+  .slice(0, 3);
+const social = (id: string) => SITE.social.find((s) => s.id === id)!;
+const spotify = social('spotify');
+const spotifyId = spotify.url.split('/').pop() ?? '';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'MusicGroup',
+  name: 'Kuf',
+  alternateName: SITE.name,
+  url: new URL('/', Astro.site).href,
+  description: SITE.claim,
+  genre: ['Indie rock', 'Rock italiano'],
+  foundingDate: '2014',
+  foundingLocation: { '@type': 'Place', name: 'Ravenna, Italia' },
+  email: SITE.email,
+  sameAs: SITE.social.map((s) => s.url),
+  member: press.formazione.map((m) => ({
+    '@type': 'OrganizationRole',
+    member: { '@type': 'Person', name: m.nome },
+    roleName: m.ruolo,
+  })),
+  album: albums.map((a) => ({
+    '@type': 'MusicAlbum',
+    name: a.data.titolo,
+    datePublished: String(a.data.anno),
+    url: new URL(`/${a.id}`, Astro.site).href,
+  })),
+};
 ---
 
-<BaseLayout>
-  <section class="mx-auto flex max-w-3xl flex-col items-center px-5 pt-24 pb-16 text-center sm:pt-32">
-    <h1 class="w-full max-w-md">
-      <Wordmark aria-hidden="true" class="h-auto w-full" />
-      <span class="visually-hidden">Kuf</span>
-    </h1>
-    <p class="mt-10 max-w-prose text-xl sm:text-2xl">{SITE.claim}</p>
-    <p class="eyebrow mt-8">Il sito nuovo è in costruzione</p>
-  </section>
+<BaseLayout description={`${SITE.name}: ${SITE.claim}`} image={new URL('/og/home.jpg', Astro.site).href}>
+  <script slot="head" type="application/ld+json" set:html={safeJson(jsonLd)} />
+  <div class="mx-auto flex max-w-6xl flex-col gap-24 px-5 pt-12 pb-10 sm:gap-32 sm:px-8 sm:pt-20">
+    <!-- 1. Hero -->
+    <section class="grid items-center gap-10 md:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] md:gap-16">
+      <div class="flex flex-col gap-8">
+        <h1 class="hero-logo w-full max-w-[22rem] sm:max-w-md">
+          <Wordmark aria-hidden="true" class="h-auto w-full" />
+          <span class="visually-hidden">Kuf</span>
+        </h1>
+        <p class="max-w-md text-xl leading-snug sm:text-2xl">{SITE.claim}</p>
+        <div class="flex flex-wrap gap-x-6 gap-y-3 text-[0.8125rem] tracking-[0.14em] uppercase">
+          <a href="/concerti" class="inline-flex items-center gap-2 underline-offset-4 hover:underline">
+            Concerti <Icon name="arrow-right" size={16} />
+          </a>
+          <a href="/pigna" class="inline-flex items-center gap-2 underline-offset-4 hover:underline">
+            Scarica Pigna <Icon name="arrow-right" size={16} />
+          </a>
+        </div>
+      </div>
+      <Image
+        src={bandPhoto}
+        alt="I Kuf, tutti e cinque, seduti vicini e rivolti verso l’obiettivo"
+        widths={[400, 600, 800, 1200]}
+        quality={70}
+        sizes="(min-width: 1152px) 600px, (min-width: 768px) 54vw, 100vw"
+        loading="eager"
+        fetchpriority="high"
+        class="photo-bw aspect-[4/3] w-full rounded-[var(--radius-card)] object-cover"
+      />
+    </section>
+
+    <!-- 2. Prossimo concerto (server island) -->
+    <section class="mx-auto flex w-full max-w-3xl flex-col gap-8" aria-labelledby="home-concerto">
+      <SectionTitle id="home-concerto" title="Il prossimo concerto" subtitle="Per sentire i Kuf" />
+      <NextConcert server:defer>
+        <NextConcertSkeleton slot="fallback" />
+      </NextConcert>
+      <p class="text-center">
+        <a
+          href="/concerti"
+          class="text-sm tracking-[0.14em] text-warm-ink uppercase underline-offset-4 hover:underline"
+        >
+          Tutti i concerti
+        </a>
+      </p>
+    </section>
+
+    <!-- 3. Dischi -->
+    <section class="flex flex-col gap-12" aria-labelledby="home-dischi">
+      <SectionTitle id="home-dischi" title="I dischi" subtitle="Si ascoltano e si scaricano gratis" />
+      <ul class="mx-auto grid w-full max-w-4xl grid-cols-2 gap-5 sm:gap-12">
+        {albums.map((a) => (
+          <li>
+            <a href={`/${a.id}`} class="album group flex flex-col gap-4">
+              <Image
+                src={a.data.cover}
+                alt={a.data.coverAlt}
+                widths={[300, 450, 640, 900]}
+                sizes="(min-width: 1024px) 420px, 45vw"
+                class="album__cover aspect-square w-full rounded-[3px]"
+              />
+              <span class="flex flex-col gap-1 text-center">
+                <span class="title-display text-base sm:text-2xl">
+                  {a.data.titolo}, {a.data.anno}
+                </span>
+                <span class="text-sm text-warm-ink underline-offset-4 group-hover:underline">
+                  Ascolta e scarica gratis
+                </span>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <!-- 4. Cose vere sui Kuf -->
+    <section class="flex flex-col gap-10" aria-labelledby="home-fatti">
+      <SectionTitle id="home-fatti" title="Cose vere sui Kuf" />
+      <KufFacts />
+    </section>
+
+    <!-- 5. Le cose da avere -->
+    <section class="flex flex-col gap-10" aria-labelledby="home-articoli">
+      <SectionTitle id="home-articoli" title="Le cose da avere" subtitle="Magliette e felpe dei Kuf" />
+      <ul class="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-3">
+        {articoli.map((item, i) => (
+          <li class:list={[i === 2 && 'hidden lg:block']}>
+            <a
+              href={`/articoli/${item.id}`}
+              class="group surface flex h-full flex-col overflow-hidden transition-colors hover:border-ink/40"
+            >
+              <div class="overflow-hidden">
+                <Image
+                  src={item.data.immagine}
+                  alt={item.data.alt}
+                  widths={[320, 480, 640]}
+                  quality={70}
+                  sizes="(min-width: 1024px) 360px, 50vw"
+                  class="aspect-[4/5] w-full object-cover transition-transform duration-300 ease-[var(--ease-soft)] group-hover:scale-[1.04]"
+                />
+              </div>
+              <p class="flex-1 p-4 text-sm sm:text-base">{item.data.nome}</p>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="text-center">
+        <a
+          href="/articoli"
+          class="inline-flex items-center gap-2 text-sm tracking-[0.14em] uppercase underline-offset-4 hover:underline"
+        >
+          Tutti gli articoli <Icon name="arrow-right" size={16} />
+        </a>
+      </p>
+    </section>
+
+    <!-- 6. Ascolta -->
+    <section class="mx-auto flex w-full max-w-3xl flex-col gap-10" aria-labelledby="home-ascolta">
+      <SectionTitle id="home-ascolta" title="Ascolta" subtitle="I Kuf dove vuoi" />
+      <SpotifyEmbed artistId={spotifyId} url={spotify.url} />
+      <ul class="flex flex-wrap justify-center gap-x-8 gap-y-3 text-sm tracking-[0.14em] uppercase">
+        {['youtube'].map((id) => {
+          const s = social(id);
+          return (
+            <li>
+              <a
+                href={s.url}
+                target="_blank"
+                rel="noopener"
+                class="inline-flex min-h-11 items-center gap-2 underline-offset-4 hover:underline"
+              >
+                <Icon name={s.id} size={18} />
+                {s.label}
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  </div>
 </BaseLayout>
+
+<style>
+  /* il logo compare con un fade breve */
+  @media (prefers-reduced-motion: no-preference) {
+    .hero-logo {
+      animation: logo-in 600ms var(--ease-soft) both;
+    }
+  }
+  @keyframes logo-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  .album__cover {
+    box-shadow: 0 8px 24px rgb(20 20 20 / 0.12);
+    transition:
+      translate var(--duration-base) var(--ease-soft),
+      box-shadow var(--duration-base) var(--ease-soft);
+  }
+  @media (hover: hover) {
+    .album:hover .album__cover {
+      translate: 0 -4px;
+      box-shadow: 0 14px 30px rgb(20 20 20 / 0.16);
+    }
+  }
+  .album:focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 6px;
+  }
+</style>

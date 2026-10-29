@@ -21,7 +21,12 @@
     "cf:dev": "npm run build && wrangler dev",
     "cf:types": "wrangler types",
     "db:migrate:local": "wrangler d1 migrations apply kuf-sito --local",
-    "ci": "npm run lint && npm run format:check && npm run check && npm test && npm run build"
+    "db:migrate:remote": "wrangler d1 migrations apply kuf-sito --remote",
+    "deploy:check": "node scripts/check-deploy.mjs",
+    "deploy": "node scripts/check-deploy.mjs && astro build && node scripts/check-deploy.mjs --dist && wrangler deploy",
+    "og": "node scripts/build-og.mjs",
+    "ci": "npm run lint && npm run format:check && npm run check && npm test && npm run build",
+    "setup:local": "scripts/setup-local.sh"
   },
   "dependencies": {
     "@astrojs/cloudflare": "14.4.2",

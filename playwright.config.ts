@@ -24,7 +24,7 @@ export default defineConfig({
   ],
   // --ignore-lock: tiene il server in primo piano (Astro 7 lo manda in background se rileva un agente AI).
   webServer: {
-    command: `npm run build && npx astro preview --port ${PORT} --ignore-lock`,
+    command: `npm run setup:local && npm run build && npx astro preview --port ${PORT} --ignore-lock`,
     env: { KUF_STYLEGUIDE: '1' },
     url: `http://localhost:${PORT}`,
     reuseExistingServer: !process.env['CI'],

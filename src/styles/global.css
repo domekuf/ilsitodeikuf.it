@@ -13,7 +13,7 @@
   --color-signal: #a84b24; /* unico colore di segnalazione (badge "prossimo"): bianco su signal 5,7:1 */
   --color-line: rgb(20 20 20 / 0.15); /* filetti sottili al posto delle ombre */
 
-  --font-display: var(--font-walkway), 'Futura', 'Century Gothic', ui-sans-serif, sans-serif;
+  --font-display: var(--font-montserrat), 'Futura', 'Century Gothic', ui-sans-serif, sans-serif;
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 
   --radius-card: 6px;
@@ -101,10 +101,10 @@
    Componenti tipografici
    ------------------------------------------------------------------ */
 @layer components {
-  /* Titoli Walkway maiuscoli, con più aria del vecchio sito */
+  /* Titoli in Montserrat Light maiuscolo (al posto di Walkway, senza licenza), con più aria del vecchio sito */
   .title-display {
     font-family: var(--font-display);
-    font-weight: 700;
+    font-weight: 300;
     text-transform: uppercase;
     letter-spacing: 0.06em;
     line-height: 1.08;
@@ -262,5 +262,20 @@
     height: 1.15rem;
     margin-top: 0.2rem;
     accent-color: var(--color-ink);
+  }
+}
+
+@layer components {
+  .form-status:empty {
+    display: none;
+  }
+  .form-status[data-tone='error'] {
+    color: var(--color-signal);
+  }
+  .form-status[data-tone='ok'] {
+    font-weight: 500;
+  }
+  button[aria-busy='true'] {
+    cursor: progress;
   }
 }

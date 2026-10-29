@@ -1,0 +1,133 @@
+---
+// Video YouTube con facade (§6.6): in pagina c'è solo la miniatura, servita dal sito.
+// Le miniature (senza bande nere) e i titoli li prepara scripts/build-video-thumbs.mjs.
+// L'iframe youtube-nocookie si carica solo al clic: nessuna richiesta a Google prima.
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+import Icon from '~/components/ui/Icon.astro';
+import { getVideoMeta, watchUrl, type VideoRef } from '~/lib/youtube';
+
+interface Props {
+  videos: VideoRef[];
+}
+
+const thumbs = import.meta.glob<{ default: ImageMetadata }>('../../assets/video/*.jpg', { eager: true });
+const metas = Astro.props.videos.map((v) => {
+  const thumb = thumbs[`../../assets/video/${v.id}.jpg`]?.default;
+  if (!thumb) throw new Error(`Manca la miniatura di ${v.id}: lancia node scripts/build-video-thumbs.mjs`);
+  return { ...getVideoMeta(v), thumb };
+});
+---
+
+<ul class:list={['grid gap-6 sm:grid-cols-2', metas.length % 3 === 0 && 'lg:grid-cols-3']}>
+  {metas.map((v) => (
+    <li class="flex flex-col gap-3">
+      <div class="video" data-video={v.id} data-start={v.start} data-title={v.title}>
+        <button type="button" class="video__play" aria-label={`Guarda il video: ${v.title}`}>
+          <Image
+            src={v.thumb}
+            alt=""
+            widths={[480, 800, 1200]}
+            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+            class="video__thumb"
+            loading="lazy"
+          />
+          <span class="video__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+              <path d="M8 5.5v13l11-6.5z" />
+            </svg>
+          </span>
+        </button>
+      </div>
+      <p class="text-sm leading-snug">
+        {v.title}
+        <a
+          href={watchUrl(v.id, v.start)}
+          class="ml-1 inline-flex items-center gap-1 text-warm-ink underline-offset-2 hover:underline"
+          rel="noopener"
+          target="_blank"
+        >
+          YouTube <Icon name="external-link" size={13} />
+        </a>
+      </p>
+    </li>
+  ))}
+</ul>
+
+<style>
+  .video {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: var(--radius-card);
+    background: var(--color-ink);
+  }
+  .video__play {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    width: 100%;
+    cursor: pointer;
+  }
+  .video__thumb {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(1) contrast(1.04);
+    transition:
+      filter var(--duration-slow) var(--ease-soft),
+      scale var(--duration-slow) var(--ease-soft);
+  }
+  .video__icon {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 999px;
+    background: rgb(251 250 247 / 0.92);
+    color: var(--color-ink);
+    padding-left: 3px;
+    transition: scale var(--duration-fast) var(--ease-soft);
+  }
+  .video__play:hover .video__thumb,
+  .video__play:focus-visible .video__thumb {
+    filter: none;
+    scale: 1.02;
+  }
+  .video__play:hover .video__icon {
+    scale: 1.06;
+  }
+  .video__play:focus-visible {
+    outline-offset: -4px;
+  }
+  /* l'iframe nasce da JS e non ha l'attributo di scope di Astro: serve :global */
+  .video :global(iframe) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+</style>
+
+<script>
+  import { embedUrl } from '~/lib/youtube';
+
+  document.addEventListener('click', (e) => {
+    const button = (e.target as Element).closest<HTMLButtonElement>('.video__play');
+    const box = button?.closest<HTMLElement>('[data-video]');
+    if (!button || !box) return;
+    const iframe = document.createElement('iframe');
+    iframe.src = embedUrl(box.dataset['video'] ?? '', Number(box.dataset['start'] ?? 0));
+    iframe.title = box.dataset['title'] ?? 'Video';
+    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+    iframe.allowFullscreen = true;
+    iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+    button.replaceWith(iframe);
+    iframe.focus();
+  });
+</script>

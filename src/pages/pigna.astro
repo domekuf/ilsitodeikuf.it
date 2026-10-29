@@ -1,0 +1,9 @@
+---
+import { getEntry } from 'astro:content';
+import AlbumPage from '~/components/album/AlbumPage.astro';
+
+const album = await getEntry('albums', 'pigna');
+if (!album) throw new Error('Disco "pigna" non trovato in src/content/albums');
+---
+
+<AlbumPage album={album} />

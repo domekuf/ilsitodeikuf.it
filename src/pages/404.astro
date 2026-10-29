@@ -1,0 +1,20 @@
+---
+// 404 (§7.10).
+import Button from '~/components/ui/Button.astro';
+import SectionTitle from '~/components/ui/SectionTitle.astro';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import { SITE } from '~/lib/site';
+---
+
+<BaseLayout title={`Pagina non trovata · ${SITE.name}`} noindex>
+  <div class="mx-auto flex max-w-xl flex-col items-center gap-8 px-5 py-24 text-center sm:py-32">
+    <SectionTitle level={1} title="404" subtitle="Pagina non trovata" />
+    <p class="text-xl sm:text-2xl">Qui non c’è niente. Come la parola Kuf.</p>
+    <div class="flex flex-wrap justify-center gap-3">
+      <Button href="/">Torna alla home</Button>
+      <Button href="/concerti" variant="outline">
+        Vai ai concerti
+      </Button>
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,72 @@
+---
+// Informativa privacy (§7.10). BOZZA da far rivedere alla band prima della pubblicazione.
+import { CONSENT_TEXT_VERSION, RETENTION_MONTHS } from 'astro:env/server';
+import SectionTitle from '~/components/ui/SectionTitle.astro';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import { SITE } from '~/lib/site';
+
+const sections: { title: string; body: string[] }[] = [
+  {
+    title: 'Chi tratta i dati',
+    body: [`I Kuf, il gruppo di Ravenna che gestisce questo sito. Per qualsiasi cosa: ${SITE.email}.`],
+  },
+  {
+    title: 'Quali dati raccogliamo',
+    body: [
+      'Solo quello che ci scrivi nei moduli: nome, email, il messaggio (se c’è), il disco che scarichi o l’articolo che ti interessa, la data, e se hai dato il consenso a ricevere notizie (con la versione del testo che hai letto).',
+      'Non salviamo il tuo indirizzo IP. Per frenare lo spam ne usiamo un’impronta temporanea che non viene conservata.',
+    ],
+  },
+  {
+    title: 'Perché',
+    body: [
+      'Per risponderti quando ci scrivi e per mandarti il link del disco che hai chiesto: lo facciamo perché ce lo chiedi tu.',
+      'Per mandarti ogni tanto notizie (nuovi dischi, concerti), ma solo se hai spuntato la casella apposta. Puoi cambiare idea quando vuoi.',
+    ],
+  },
+  {
+    title: 'Per quanto tempo',
+    body: [
+      `Richieste e messaggi: ${RETENTION_MONTHS} mesi, poi si cancellano da soli.`,
+      'Se hai chiesto di ricevere notizie, teniamo nome ed email finché non revochi il consenso.',
+    ],
+  },
+  {
+    title: 'Chi altro li vede',
+    body: [
+      'Cloudflare, che ospita il sito e il database, e Resend, che spedisce le email. Usano i dati solo per farci questo servizio.',
+      'Il sito usa Cloudflare Turnstile contro lo spam e Cloudflare Web Analytics per contare le visite, senza cookie. Non c’è profilazione e non ci sono cookie di tracciamento.',
+      'I video di YouTube e il lettore di Spotify si caricano solo se li fai partire tu.',
+    ],
+  },
+  {
+    title: 'I tuoi diritti',
+    body: [
+      `Puoi chiederci di vedere, correggere o cancellare i tuoi dati, e revocare il consenso, scrivendo a ${SITE.email}. Per smettere di ricevere notizie c’è anche il link in fondo a ogni nostra email.`,
+      'Se pensi che non abbiamo trattato bene i tuoi dati puoi rivolgerti al Garante per la protezione dei dati personali.',
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title={`Privacy · ${SITE.name}`}
+  description="Come trattiamo i dati che ci lasci nei moduli del sito."
+>
+  <article class="mx-auto flex max-w-2xl flex-col gap-12 px-5 py-14 sm:py-20">
+    <SectionTitle level={1} title="Privacy" subtitle="Detta semplice" />
+    <p class="text-lg">
+      Ci teniamo in contatto solo se vorrai. Qui c’è scritto cosa facciamo con i dati che ci lasci nei moduli
+      del sito.
+    </p>
+    {sections.map((s) => (
+      <section class="flex flex-col gap-3">
+        <h2 class="title-display text-xl">{s.title}</h2>
+        {s.body.map((p) => (
+          <p>{p}</p>
+        ))}
+      </section>
+    ))}
+    <p class="text-sm text-warm-ink">Versione del testo dei consensi: {CONSENT_TEXT_VERSION}.</p>
+  </article>
+</BaseLayout>

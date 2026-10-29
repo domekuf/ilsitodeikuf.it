@@ -1,0 +1,33 @@
+---
+// /concerti/[slug] (§7.3): la lista con la modale del concerto già aperta.
+// Slug sconosciuto: 404 con il link alla lista.
+import Button from '~/components/ui/Button.astro';
+import SectionTitle from '~/components/ui/SectionTitle.astro';
+import ConcertiPage from '~/components/concerti/ConcertiPage.astro';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import { getConcert } from '~/lib/server/concerts';
+import { SITE } from '~/lib/site';
+
+export const prerender = false;
+
+const slug = Astro.params.slug ?? '';
+const { concert, result } = await getConcert(slug, (p) => Astro.locals.cfContext.waitUntil(p));
+if (concert) Astro.response.headers.set('Cache-Control', 'public, max-age=300');
+else Astro.response.status = result.error ? 503 : 404;
+---
+
+{concert ? (
+  <ConcertiPage result={result} open={concert} />
+) : (
+  <BaseLayout title={`Concerto non trovato · ${SITE.name}`} noindex>
+    <div class="mx-auto flex max-w-xl flex-col items-center gap-8 px-5 py-20 text-center">
+      <SectionTitle level={1} title="Non c’è" subtitle="Questo concerto non lo troviamo" />
+      <p>
+        {result.error
+          ? 'Il calendario dei concerti oggi non risponde. Riprova tra un po’.'
+          : 'Forse il link è sbagliato, o la data è cambiata.'}
+      </p>
+      <Button href="/concerti">Vai ai concerti</Button>
+    </div>
+  </BaseLayout>
+)}

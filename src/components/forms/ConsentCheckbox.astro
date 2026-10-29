@@ -1,0 +1,28 @@
+---
+// Consensi (§6.7): una riga informativa (non è un consenso, non blocca il form)
+// e una sola checkbox facoltativa, mai spuntata di default.
+interface Props {
+  idPrefix: string;
+  /** testo della riga informativa: "risponderti" o "mandarti il disco" */
+  purpose: 'contact' | 'download';
+}
+
+const { idPrefix, purpose } = Astro.props;
+const why = purpose === 'download' ? 'mandarti il disco' : 'risponderti';
+---
+
+<div class="flex flex-col gap-4">
+  <p class="field__hint">
+    Usiamo nome ed email per {why} e li conserviamo come spiegato nell'
+    <a href="/privacy" class="underline underline-offset-2">
+      informativa privacy
+    </a>
+    .
+  </p>
+  <label class="check" for={`${idPrefix}-updates`}>
+    <input id={`${idPrefix}-updates`} type="checkbox" name="updates" value="1" />
+    <span>
+      Voglio ricevere ogni tanto notizie dai Kuf (nuovi dischi, concerti). Posso cancellarmi quando voglio.
+    </span>
+  </label>
+</div>

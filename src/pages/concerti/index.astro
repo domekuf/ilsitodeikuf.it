@@ -1,0 +1,12 @@
+---
+// /concerti (§7.2): SSR, dati dal calendario con cache (lib/calendar.ts).
+import ConcertiPage from '~/components/concerti/ConcertiPage.astro';
+import { getConcerts } from '~/lib/server/concerts';
+
+export const prerender = false;
+
+const result = await getConcerts((p) => Astro.locals.cfContext.waitUntil(p));
+Astro.response.headers.set('Cache-Control', 'public, max-age=300');
+---
+
+<ConcertiPage result={result} />

@@ -1,5 +1,6 @@
 ---
-// Modale "Contattaci", presente in tutte le pagine (§7.4). Il form vero arriva in Fase 4.
+// Modale "Contattaci", presente in tutte le pagine (§7.4).
+import ContactForm from '~/components/forms/ContactForm.astro';
 import Modal from '~/components/ui/Modal.astro';
 import SectionTitle from '~/components/ui/SectionTitle.astro';
 import { SITE } from '~/lib/site';
@@ -21,9 +22,9 @@ const [user, domain] = SITE.email.split('@');
   modalTitle={`Contattaci · ${SITE.name}`}
 >
   <SectionTitle id="contattaci-title" title="Scrivici" subtitle="Per raggiungere i Kuf" />
-  <div class="mx-auto mt-8 max-w-prose text-center">
-    <p class="text-warm-ink">Il modulo per scriverci arriva a breve.</p>
-    <p class="mt-4">
+  <div class="mx-auto mt-8 flex max-w-xl flex-col gap-8">
+    <ContactForm idPrefix="contatto" />
+    <p class="text-center text-sm text-warm-ink">
       Oppure scrivici a{' '}
       {/* indirizzo offuscato contro gli scraper: lo ricompone lo script, senza JS resta leggibile */}
       <a

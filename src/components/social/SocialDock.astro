@@ -3,14 +3,13 @@
 // Desktop (≥ md): colonna verticale con ingresso sfalsato dal basso (omaggio al vecchio fadeInUp) e tooltip a sinistra.
 // Mobile: un solo bottone "speed dial" che apre i social a colonna.
 import Icon from '~/components/ui/Icon.astro';
-import { brandColors } from '~/components/ui/icons';
 import { SITE } from '~/lib/site';
 ---
 
 <div class="dock" data-dock>
   <ul id="dock-list" class="dock__list" aria-label="I Kuf sui social">
-    {SITE.social.map((s, i) => (
-      <li class="dock__item" style={`--i:${i};--n:${SITE.social.length};--brand:${brandColors[s.id]}`}>
+    {SITE.social.map((s) => (
+      <li class="dock__item" data-brand={s.id}>
         <a href={s.url} class="dock__btn" rel="noopener me" target="_blank" aria-label={`Kuf su ${s.label}`}>
           <Icon name={s.id} size={18} />
         </a>
@@ -38,6 +37,39 @@ import { SITE } from '~/lib/site';
 </div>
 
 <style>
+  /* Indici e colori di brand nel CSS, non in attributi style: la CSP non ammette stili inline (ADR-060).
+     I colori sono quelli di src/components/ui/icons.ts → brandColors. */
+  .dock__list {
+    --n: 5;
+  }
+  .dock__item:nth-child(1) {
+    --i: 0;
+  }
+  .dock__item:nth-child(2) {
+    --i: 1;
+  }
+  .dock__item:nth-child(3) {
+    --i: 2;
+  }
+  .dock__item:nth-child(4) {
+    --i: 3;
+  }
+  .dock__item:nth-child(5) {
+    --i: 4;
+  }
+  .dock__item[data-brand='facebook'] {
+    --brand: #0866ff;
+  }
+  .dock__item[data-brand='youtube'] {
+    --brand: #ff0000;
+  }
+  .dock__item[data-brand='instagram'] {
+    --brand: #ff0069;
+  }
+  .dock__item[data-brand='spotify'] {
+    --brand: #1ed760;
+  }
+
   .dock {
     --size: 2.75rem;
     position: fixed;

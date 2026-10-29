@@ -13,7 +13,23 @@ async function audit(page: Page) {
   expect(summary).toEqual([]);
 }
 
-for (const path of ['/', '/contattaci', '/styleguide', '/styleguide/esempio/esempio']) {
+for (const path of [
+  '/',
+  '/contattaci',
+  '/styleguide',
+  '/styleguide/esempio/esempio',
+  '/articoli',
+  '/articoli/felpa-gufo-grigia',
+  '/pigna',
+  '/via-trieste',
+  '/press',
+  '/concerti',
+  '/concerti/2030-06-14-almagia',
+  '/concerti/2014-03-14-artificierie-almagia',
+  '/concerti/non-esiste',
+  '/privacy',
+  '/api/download/abc.def',
+]) {
   test(`axe senza errori: ${path}`, async ({ page }) => {
     await page.goto(path);
     await audit(page);

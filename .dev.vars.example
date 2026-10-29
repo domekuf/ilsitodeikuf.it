@@ -1,21 +1,23 @@
 # Copia questo file in .dev.vars (che NON va in git) per lo sviluppo locale.
 # Con questi valori il sito funziona senza nessuna chiave reale.
 
-# Concerti: fixture locali invece di Google Calendar
+# Concerti: fixture locali invece di Google Calendar.
+# Per provare il calendario vero: CALENDAR_SOURCE=google + le due variabili del service account
+# (GOOGLE_CALENDAR_ID è già in wrangler.jsonc).
 CALENDAR_SOURCE=fixture
 # GOOGLE_SA_EMAIL=
 # GOOGLE_SA_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
 
 # Foto delle venue: senza chiave si usano i placeholder
 # GOOGLE_PLACES_API_KEY=
-# PUBLIC_GOOGLE_MAPS_EMBED_KEY=
+# GOOGLE_MAPS_EMBED_KEY=
 
 # Email: in locale vengono solo stampate in console
 MAIL_PROVIDER=log
 # RESEND_API_KEY=
 
-# Turnstile: chiavi di test ufficiali (passano sempre)
-PUBLIC_TURNSTILE_SITE_KEY=1x00000000000000000000AA
+# Turnstile: chiave di test ufficiale (passa sempre). La site key NON va qui: è pubblica, entra
+# nell'HTML in build e in sviluppo vale già quella di test. Quella vera va in .env.production.
 TURNSTILE_SECRET_KEY=1x0000000000000000000000000000000AA
 
 # Token firmati (in locale vanno bene valori qualsiasi, in produzione 32+ byte casuali diversi)

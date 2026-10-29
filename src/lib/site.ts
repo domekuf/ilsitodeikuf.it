@@ -9,6 +9,8 @@ export const SITE = site as {
   name: string;
   claim: string;
   email: string;
+  /** token di Cloudflare Web Analytics; vuoto = disattivato */
+  analyticsToken: string;
   nav: NavItem[];
   social: SocialLink[];
   facts: string[];

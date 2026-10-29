@@ -1,0 +1,7 @@
+---
+// Contenitore del widget Turnstile (§8.4). Lo script di Cloudflare si carica solo quando
+// qualcuno inizia a compilare un form (src/scripts/turnstile.ts), non a ogni pagina.
+import { PUBLIC_TURNSTILE_SITE_KEY } from 'astro:env/client';
+---
+
+<div class="turnstile empty:hidden" data-turnstile data-sitekey={PUBLIC_TURNSTILE_SITE_KEY}></div>

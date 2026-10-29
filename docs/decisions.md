@@ -209,3 +209,166 @@ Note originali dell'audit:
 
 ### ADR-030 · JavaScript — Nota
 - Tutto il JS della Fase 2 (router delle modali, menu, FAB) pesa circa 2 KB gzip ed è inline nelle pagine. Siamo molto sotto il budget di 30 KB.
+
+---
+
+## I. Scelte della Fase 3 (contenuti statici)
+
+### ADR-031 · Montserrat Light al posto di Walkway — Presa (27/10, ok di Domenico)
+- Walkway non ha una licenza utilizzabile. Ho confrontato 12 font OFL sobri; il più vicino (lettere larghe, C e O tonde, tratto leggero) è **Montserrat Light (300)**. È un'istanza statica ridotta al set latin: 18 KB.
+- Il logo non cambia: è disegnato a parte e non dipende dal font.
+
+### ADR-032 · Logo v2: lettere bilanciate — Presa
+- Prima la K era larga 157, la U 141 e la F 117 (unità del disegno). Ora sono 136, 138 e 114. Il braccio della K è più ripido e la gamba è a 45°, con la stessa giunzione dell'originale.
+
+### ADR-033 · Favicon: monogramma K — Presa
+- Set completo generato da `scripts/build-favicons.py`: `favicon.svg`, `favicon.ico` 32, `apple-touch-icon` 180, icone 192/512 (più la versione maskable) e `site.webmanifest`.
+
+### ADR-034 · Cover in alta risoluzione dai tag degli mp3 — Presa
+- Le cover vere stavano dentro gli mp3, nei tag ID3: **Pigna 2835 px** (salvata a 1600) e **Via Trieste 1440 px**. Nessun upscale, nessun TODO, e non serve più esportare il PSD.
+
+### ADR-035 · Zip dei dischi — Presa (caricamento su R2 non eseguito)
+- `scripts/build-album-zips.py` li ricrea in `materiali/downloads/` (fuori da git):
+  - "Kuf - Pigna (2017).zip": 122 MB, 10 mp3 a 320 kbps;
+  - "Kuf - Via Trieste (2015).zip": 119 MB, 12 mp3 a 192 kbps.
+- Nomi in NFC con flag UTF-8; niente `__MACOSX` e niente `Icon\r`; `cover.jpg` dentro lo zip.
+- Tag ID3 riscritti in v2.3 (Pigna era v2.2) con i titoli della tracklist ufficiale. Correggono, per esempio, "L'Unico Centro **é** il Confine" in "L'unico centro **è** il confine". Cover incorporata a 1000 px.
+- Chiavi su R2: `downloads/kuf-pigna-2017.zip` e `downloads/kuf-via-trieste-2015.zip`. Lo script `scripts/upload-downloads.sh` è pronto ma **non è stato lanciato**.
+
+### ADR-036 · Video: facade nostra, niente dipendenze — Presa (cambia ADR-011)
+- La miniatura viene scaricata e ottimizzata **in build** e servita dal sito. Il browser non contatta Google finché non si clicca play; al clic si carica l'iframe `youtube-nocookie`. Titoli via oEmbed in build, con fallback all'ID.
+- Sono circa 15 righe di JS, contro un custom element esterno.
+
+### ADR-037 · Press kit — Presa
+- I dati stanno in `src/content/press.json` (non `press.md`): sono quasi tutti liste.
+- Link controllati il 28/10/2026:
+  - **vivi** (pubblicati): Distopic (recensione), Rockit, il blog dell'Alligatore (aggiornato a `.com`), Distopic (anteprima di Matite), Exhimusic, Onda Musicale;
+  - **morto**: Rock Garage (rimanda alla home del sito);
+  - **non verificabili da qui** (il sito rifiuta il controllo automatico): Music on Tnt, iyezine (anche il link "Continua su iyezine" della bio), Radiocoop, Ravenna Today, Tuco, Long Live Rock 'n' Roll. Per ora sono nascosti: per pubblicarli basta aprirli dal browser e mettere `"verified": true`.
+- I loghi e lo zip si generano con uno script (`scripts/build-press-logos.py`), non durante `astro build`: servirebbe una dipendenza in più per lo zip.
+
+### ADR-038 · Redirect — Presa
+- I `.php` e i vecchi `/public/*` stanno nella config `redirects`: l'adapter li scrive in `_redirects` e Cloudflare risponde con un vero 301.
+- `/download.php?dl=…` è un piccolo endpoint SSR (`src/pages/download.php.ts`), perché dipende dalla query.
+- `/concerti.php` porta a `/concerti`, che arriva in Fase 5: fino ad allora dà 404.
+
+### ADR-039 · Form ancora finti — Nota
+- ContactForm (anche nella modale Contattaci) e DownloadForm hanno già campi, consensi, honeypot e validazione in italiano, ma non inviano niente: lo dicono anche all'utente. L'invio vero arriva in Fase 4.
+
+### ADR-040 · Video: miniature senza bande nere, nessuna rete in build — Presa (28/10)
+- `scripts/build-video-thumbs.mjs` scarica la miniatura migliore (maxres), trova e toglie le bande nere, ritaglia in 16:9 e salva in `src/assets/video/`. I titoli finiscono in `src/content/video-meta.json`. La build non chiama più YouTube.
+- Corretto il riquadro nero attorno al player dopo il clic: lo stile dell'iframe non si applicava (scope CSS di Astro).
+- "Tenco e Pasolini" (`dgj6n8ed7fg`) ora parte dall'inizio (tolto `start: 53`).
+
+### ADR-041 · Correzione: quale video è quale — Presa (da confermare)
+- Con i titoli veri presi da YouTube risulta che il vecchio press kit aveva due etichette sbagliate:
+  - `ES_G9WQaA3s` è **"Kuf - Fuori da Qui (2014)"**, quindi sta giustamente sotto Via Trieste;
+  - `aqjz-PGMtns` (il video della vecchia home) è **"Kuf - Pigna (2017)"**, non "Fuori da qui": l'avevo indicato male io in Fase 0.
+- Quindi `aqjz-PGMtns` va sotto **Pigna** (4 video) e Via Trieste resta con i suoi 3. Se preferisci un altro ordine, si cambia in un attimo.
+
+---
+
+## J. Scelte della Fase 4 (form, email, D1)
+
+### ADR-042 · I form richiedono JavaScript — Presa
+- Turnstile funziona solo con JavaScript, quindi un invio "classico" senza JS non supererebbe comunque l'anti-spam. Senza JS il form resta visibile, ma un `<noscript>` invita a scrivere a kuf.ravenna@gmail.com. Le pagine restano statiche (veloci) e le Actions si chiamano dal client.
+
+### ADR-043 · Turnstile: offline con le chiavi di test — Presa
+- Con le chiavi di test ufficiali il client non carica lo script di Cloudflare e mette un token finto. Il server lo accetta **solo** con il secret di test "passa sempre" (`1x…AA`) e lo rifiuta con `2x…`/`3x…`. Dev, CI ed e2e funzionano senza rete; con le chiavi vere tutto passa da `siteverify`.
+- In produzione lo script si carica al primo focus su un form (non a ogni pagina), con `appearance: interaction-only`: di solito l'utente non vede niente.
+
+### ADR-044 · Rate limit sull'IP di Cloudflare — Presa
+- La chiave è `azione + hash(cf-connecting-ip)`: 3 invii al minuto per form. In produzione l'header lo scrive Cloudflare e non si può falsificare. Negli e2e ogni test ne usa uno diverso.
+
+### ADR-045 · Email via HTTP, senza SDK — Presa
+- Resend si chiama con una `fetch` (`POST /emails`, campo `reply_to`): niente dipendenze. Il provider Cloudflare usa il binding `EMAIL` (beta): il Reply-To lo passiamo sia come campo sia come header, perché la documentazione non è ancora chiara.
+- I template stanno in `src/emails/` (non in `emails/` alla radice) per usare gli stessi import del resto del codice.
+- Errori di D1 o della mail finiscono nei log solo con il tipo di errore, mai con nomi o email (c'è un test apposta).
+
+### ADR-046 · Se qualcosa si rompe — Presa
+- D1 non risponde: la mail alla band parte lo stesso (il messaggio non va perso).
+- La mail non parte (form contatti): errore umano con l'indirizzo di riserva.
+- Le mail del download non partono: il download parte comunque.
+- Honeypot compilato: risposta normale, ma niente salvataggio e niente mail.
+
+### ADR-047 · Disiscrizione — Presa
+- Il token contiene l'id del contatto e il suo `unsubscribe_salt`, firmati. Cambiando il salt su D1 si invalidano tutti i link vecchi di quella persona. Il link non scade.
+- GET mostra solo il bottone, la revoca avviene con il POST (i client di posta che aprono i link in anteprima non la fanno scattare).
+- Il link compare solo nelle mail di chi ha dato il consenso. Il form contatti non manda mail a chi scrive, quindi lì il link non c'è: per ora la revoca si chiede via email. Quando ci sarà una newsletter, ogni invio avrà il link.
+
+### ADR-048 · Test di D1 senza Miniflare — Presa
+- Le query si testano con un piccolo adattatore D1 sopra `node:sqlite` (`tests/unit/helpers/d1.ts`): stesso SQLite, foreign key attive come su D1, nessuna dipendenza in più. Il flusso completo su D1 locale vero lo coprono gli e2e (`npm run setup:local` applica le migrazioni).
+
+### ADR-049 · Privacy: bozza — Da rivedere (band)
+- `/privacy` è una bozza in linguaggio semplice con i punti del §7.10. Va riletta da voi: in particolare chi è il "titolare" (la band non è una società) e se volete un indirizzo postale.
+
+### ADR-050 · Calendario: filtro sul titolo, oltre a `q` — Presa
+- Il calendario vero contiene anche prove, "date rosse", impegni e concerti annullati rinominati `annullato @ …`. La ricerca `q` di Google è a testo libero (cerca anche in descrizione e luogo), quindi in più teniamo solo gli eventi il cui **titolo comincia** con `CALENDAR_QUERY`. Con `CALENDAR_QUERY` vuoto non si filtra.
+- Il titolo si scompone in città, locale e ospiti (`Città - Locale w/ Ospiti`); se manca la città, la si cerca nell'indirizzo (CAP + città).
+
+### ADR-051 · Slug dei concerti dal locale — Presa
+- `AAAA-MM-GG-{locale}`, come l'esempio del brief (`2017-11-17-almagia`): niente città né ospiti nello slug, così è corto. Le collisioni (`-2`) si risolvono sempre nello stesso ordine (data, poi id dell'evento), quindi gli URL non cambiano da una lettura all'altra.
+
+### ADR-052 · Date: in ora italiana, a prescindere dal server — Presa
+- Gli eventi "tutto il giorno" restano date (`YYYY-MM-DD`) e si formattano senza fuso; quelli con orario sono ISO con offset (Google li dà già in `Europe/Rome`) e si formattano con `Intl` in `Europe/Rome`. I test girano anche con `TZ=America/Los_Angeles`.
+- Un concerto resta "in programma" fino alla fine: per quelli tutto il giorno fino a mezzanotte italiana, per quelli con orario fino all'ora di fine (o 3 ore dopo l'inizio, se manca).
+- "Orario da definire" solo per i concerti futuri senza orario: per quelli passati l'orario non si mostra (come diceva il vecchio sito, "a che ora? Questo non si chiede mai!").
+
+### ADR-053 · Cache del calendario in KV, non nella Cache API — Presa
+- Il brief lascia la scelta. KV è globale (la Cache API è per data center) e permette di tenere l'ultima copia buona senza scadenza come riserva. 96 scritture al giorno al massimo, ben dentro il free tier. Una piccola memoria per isolate evita anche le letture KV ravvicinate.
+- Con `CALENDAR_SOURCE=google` e credenziali mancanti il sito **non** ripiega sulla fixture (mostrerebbe concerti finti): mostra "il calendario non risponde".
+
+### ADR-054 · Foto delle venue: solo foto vere, nessun ripiego — Presa (rivista)
+- Prima versione: 3 immagini "di repertorio" (da un pool di 8 ricavate dagli asset del sito) quando Google non aveva foto. **Tolte su richiesta della band**: o foto vere del posto, o niente. Il brief (§7.3, §8.2) prevedeva i placeholder: è una deviazione voluta.
+- Le `foto:` della descrizione sono già nell'HTML (funzionano senza JS). Negli altri casi la galleria parte nascosta; all'apertura della modale lo script chiede `/api/venue-photos` e la mostra solo se arrivano foto, con le attribuzioni ("Foto: … via Google Maps"). Senza foto, o senza JS, non c'è nessuno spazio vuoto.
+- Places (New): Text Search con field mask `places.id` (gratis), Place Details con `photos`, Place Photos con `skipHttpRedirect=true`. Si salva in KV solo il `place_id`; le risposte con le foto restano in cache edge 3 ore e non si copiano su R2. "Nessuna foto" si tiene in cache solo un'ora.
+- Tetto di 40 ricerche al giorno (contatore in KV, non atomico: è una cintura di sicurezza) oltre al budget alert su Google Cloud.
+
+### ADR-055 · Dettaglio concerto via fetch, `.ics` come endpoint — Presa
+- Come chiede il brief, dalla lista il dettaglio arriva con il fetch di `/concerti/<slug>` (stesso router delle altre modali). L'evento `kuf:modal-open` fa partire il caricamento delle foto.
+- `/concerti/<slug>.ics` (RFC 5545: CRLF, righe piegate a 75 ottetti, orari in UTC, date "tutto il giorno" con fine esclusa).
+- Condividi: Web Share API dove c'è (mobile), altrimenti copia il link.
+
+### ADR-056 · Home: prossimo concerto come server island — Presa
+- La home resta prerenderizzata; il riquadro del prossimo concerto arriva da `/_server-islands/NextConcert` (cache 5 minuti, stessi dati di `/concerti`). Lo scheletro ha la stessa sagoma, quindi niente salti (CLS 0).
+- Senza concerti in programma: "Nessun concerto in programma. Ci vediamo a natale." e il link ai concerti passati. Se il calendario non risponde lo dice, con lo stesso link.
+- Le chiavi delle server island cambiano a ogni build: con un solo Worker va bene. Se un giorno servisse (CDN con pagine vecchie in cache), si fissa `ASTRO_KEY` (`astro create-key`).
+
+### ADR-057 · Prestazioni — Presa
+- CSS inline in ogni pagina (`build.inlineStylesheets: 'always'`): ~10 KB gzip, una richiesta bloccante in meno sul 4G. Con un sito così piccolo conviene più della cache del CSS tra pagine.
+- Prime immagini delle griglie con `fetchpriority="high"` e senza animazione d'ingresso (l'animazione allo scroll ritardava l'LCP).
+- Lighthouse mobile (preview locale, quindi **senza** compressione: in produzione Cloudflare aggiunge brotli): `/` 96–98, `/concerti` 97, `/articoli` 97, `/pigna` 97. Accessibilità, best practice e SEO 100. CLS 0 ovunque.
+
+### ADR-058 · Spotify al clic, non all'ingresso in viewport — Presa (deviazione dal brief)
+- Il brief chiede di caricare l'embed quando entra nella viewport. L'iframe di Spotify però imposta cookie e tracker suoi: caricarlo da solo vorrebbe dire mandare dati a Spotify senza che la persona l'abbia chiesto, contro il "niente tracker, niente banner" del sito. Si carica solo premendo "Carica il player"; accanto c'è il link diretto a Spotify.
+
+### ADR-059 · Immagini Open Graph — Presa
+- Home e concerti: due immagini fisse (`public/og/`) generate da `scripts/build-og.mjs` con il Chromium di Playwright, che c'è già. Dischi: la cover; articoli: la foto.
+- Niente immagine diversa per ogni concerto: servirebbe una libreria di rendering a runtime (es. satori + resvg) solo per questo. Tutti i concerti usano l'immagine "Concerti"; titolo e descrizione restano specifici.
+- Hero della home: la foto di gruppo (`kuf-gruppo.jpg`, quella che avete scelto per l'immagine di lancio) al posto di `kuf-foto-mare.jpg` indicata nel brief. Si cambia in una riga in `src/pages/index.astro`.
+
+### ADR-060 · CSP con gli hash di Astro — Presa
+- `security.csp` di Astro: in ogni pagina un `<meta>` con `script-src` e `style-src` fatti di hash degli script e degli stili che Astro genera; per le pagine SSR Astro manda la stessa CSP come header. Niente `'unsafe-inline'`.
+- Origini ammesse: script da Turnstile e dal beacon di Web Analytics; iframe da YouTube (nocookie), Spotify, Google Maps, Turnstile; immagini da qualsiasi https (le foto della venue possono arrivare da Google o da un link `foto:` qualsiasi); `connect-src` solo verso il sito e Web Analytics.
+- Le direttive che un `<meta>` non può dare (`frame-ancestors`) e gli altri header (`X-Frame-Options`, `nosniff`, `Referrer-Policy`, `Permissions-Policy`, `COOP`, `HSTS` senza `includeSubDomains` per non toccare i sottodomini di Aruba) arrivano da `public/_headers` per le pagine statiche e da `src/worker.ts` per tutto il resto. Un test controlla che le due liste coincidano.
+- Conseguenze sul codice: niente attributi `style="…"` (gli indici delle animazioni sfalsate e i colori dei social ora sono CSS con `:nth-child` e `data-brand`); l'unico script inline scritto a mano sta in `src/lib/inline-scripts.mjs` e `astro.config.mjs` ne calcola l'hash. Markdown senza Shiki (stili inline). In `npm run dev` la CSP non c'è (limite di Astro): la provano build, preview e un test e2e che naviga il sito cercando violazioni.
+
+### ADR-061 · Sitemap nostra, non @astrojs/sitemap — Presa (deviazione dal brief)
+- `@astrojs/sitemap` vede solo le pagine generate in build; i dettagli dei concerti arrivano dal calendario a runtime. `/sitemap.xml` è un endpoint di poche righe che elenca pagine, articoli e tutti i concerti, in cache un'ora. Una dipendenza in meno.
+
+### ADR-062 · Web Analytics con lo snippet, attivabile da `site.json` — Presa
+- La documentazione di Cloudflare non garantisce l'iniezione automatica del beacon per i siti serviti da un Worker. Lo snippet ufficiale si aggiunge a ogni pagina solo se `analyticsToken` in `src/content/site.json` non è vuoto (il token è pubblico). Senza cookie, nessun banner.
+
+### ADR-063 · Variabili lette a runtime dove possibile — Presa
+- Le variabili `context: 'client'` di `astro:env` vengono scritte nel codice in build e non leggono `.dev.vars`: per questo la chiave della mappa (che serve solo al dettaglio concerti, SSR) è diventata `GOOGLE_MAPS_EMBED_KEY`, letta dal server. Resta in build solo `PUBLIC_TURNSTILE_SITE_KEY`, perché i form stanno anche nelle pagine statiche: `npm run deploy` (via `scripts/check-deploy.mjs`) si rifiuta di partire se è la chiave di test, se mancano gli ID di D1/KV o se calendario e mail sono ancora in modalità di prova.
+
+### ADR-064 · Deploy in due passi, mai automatico — Presa
+- Primo deploy su `*.workers.dev` con le `routes` commentate, prove complete, poi dominio custom. La redirect www → apex la fa il Worker per le risposte dinamiche e una Redirect Rule di Cloudflare per gli asset statici (che non passano dal Worker).
+- Il workflow GitHub di deploy è pronto ma parte solo a mano (`workflow_dispatch`) ed è in `docs/github/` finché non lo spostate voi in `.github/workflows/`.
+
+### ADR-065 · Site key di Turnstile: `.env.production`, controllata anche nella build — Presa
+- Al primo deploy di prova la build ha usato la site key di test: con l'adapter Cloudflare, `.dev.vars` vale anche in build e vince su `.env`. Il server, con la secret vera, rifiutava i token finti, quindi i form online non funzionavano.
+- La chiave vera sta in `.env.production` (solo build) e non deve comparire in `.dev.vars`. `npm run deploy` lo controlla prima della build e, dopo, cerca la chiave di test nell'HTML generato: se c'è, il deploy non parte.
+
+### ADR-066 · Concerti: solo l'ora di inizio — Presa (band)
+- Il brief chiedeva "21:30–23:30" quando c'è la fine. La band preferisce solo l'inizio: in Google Calendar la fine c'è sempre, e spesso è quella di default (mezz'ora o un'ora dopo), non l'orario vero. La fine resta nei dati: serve per capire quando un concerto è finito, per il file `.ics` e per il JSON-LD.

@@ -1,0 +1,118 @@
+---
+// Prossimo concerto in home (§7.1): server island (`server:defer`), la home resta statica.
+// Arriva da /_server-islands/NextConcert con gli stessi dati (e la stessa cache) di /concerti.
+import Button from '~/components/ui/Button.astro';
+import Icon from '~/components/ui/Icon.astro';
+import { splitConcerts } from '~/lib/calendar';
+import { dateParts, formatLongDate, formatTime } from '~/lib/dates';
+import { getConcerts } from '~/lib/server/concerts';
+
+const result = await getConcerts((p) => Astro.locals.cfContext.waitUntil(p));
+const next = splitConcerts(result.concerts).upcoming[0];
+Astro.response.headers.set('Cache-Control', 'public, max-age=300');
+
+const d = next ? dateParts(next.start) : null;
+const time = next ? (formatTime(next) ?? 'Orario da definire') : '';
+---
+
+{next && d ? (
+  <article class="next-concert" aria-labelledby="prossimo-concerto">
+    <a href={`/concerti/${next.slug}`} class="next-concert__date" aria-hidden="true" tabindex="-1">
+      <span class="next-concert__day">{d.day}</span>
+      <span class="next-concert__month">{d.month}</span>
+    </a>
+    <div class="flex min-w-0 flex-col gap-2">
+      <h3 id="prossimo-concerto" class="title-display text-3xl sm:text-4xl">
+        <a href={`/concerti/${next.slug}`} class="hover:underline">
+          {next.venue}
+        </a>
+      </h3>
+      <p class="text-lg">
+        {next.city}
+        {next.city && next.guests && ' · '}
+        {next.guests && `con ${next.guests}`}
+      </p>
+      <p class="text-warm-ink">
+        <time datetime={next.start}>{formatLongDate(next.start)}</time> · {time}
+      </p>
+      <div class="mt-3 flex flex-wrap gap-3">
+        <Button href={`/concerti/${next.slug}`} size="sm">
+          Dettagli
+          <Icon name="arrow-right" size={16} />
+        </Button>
+        <Button
+          href={`/concerti/${next.slug}.ics`}
+          download={`kuf-${next.slug}.ics`}
+          variant="outline"
+          size="sm"
+        >
+          <Icon name="calendar-plus" size={16} />
+          Aggiungi al calendario
+        </Button>
+      </div>
+    </div>
+  </article>
+) : (
+  <div class="next-concert next-concert--empty">
+    <p class="title-display text-2xl sm:text-3xl">
+      {result.error ? 'Il calendario oggi non risponde.' : 'Nessun concerto in programma.'}
+    </p>
+    <p class="text-lg">Ci vediamo a natale.</p>
+    <a href="/concerti" class="inline-flex items-center gap-2 underline underline-offset-4">
+      I concerti passati
+      <Icon name="arrow-right" size={16} />
+    </a>
+  </div>
+)}
+
+<style>
+  .next-concert {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1rem;
+    align-items: start;
+    padding: 1.25rem;
+    border: 1px solid var(--color-ink);
+    border-radius: var(--radius-card);
+    background: var(--color-surface);
+  }
+  .next-concert--empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    text-align: center;
+    border-color: var(--color-line);
+  }
+  .next-concert__date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 3.25rem;
+    line-height: 1;
+  }
+  .next-concert__day {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: 3.25rem;
+  }
+  .next-concert__month {
+    margin-top: 0.4rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--color-signal);
+  }
+  @media (min-width: 640px) {
+    .next-concert {
+      gap: 2.5rem;
+      padding: 2.25rem 2.5rem;
+    }
+    .next-concert__date {
+      min-width: 4.5rem;
+    }
+    .next-concert__day {
+      font-size: 5.5rem;
+    }
+  }
+</style>

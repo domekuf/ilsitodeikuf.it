@@ -1,0 +1,137 @@
+---
+// Dettaglio di un concerto nella modale (§7.3). La descrizione dell'evento NON si mostra mai:
+// arrivano qui solo i campi già filtrati da lib/calendar.ts (link e foto dichiarati).
+import { GOOGLE_MAPS_EMBED_KEY } from 'astro:env/server';
+import Button from '~/components/ui/Button.astro';
+import Icon from '~/components/ui/Icon.astro';
+import type { Concert } from '~/lib/calendar';
+import { formatWhen } from '~/lib/dates';
+import VenueGallery from './VenueGallery.astro';
+
+interface Props {
+  concert: Concert;
+  /** è il primo dei concerti in programma */
+  next?: boolean;
+}
+
+const { concert: c, next = false } = Astro.props;
+const upcoming = c.status === 'upcoming';
+const badge = next ? 'Il prossimo' : upcoming ? 'In programma' : 'Passato';
+const url = new URL(`/concerti/${c.slug}`, Astro.site).href;
+const mapsQuery = c.location ?? [c.venue, c.city].filter(Boolean).join(', ');
+const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapsQuery)}`;
+const embedUrl = GOOGLE_MAPS_EMBED_KEY
+  ? `https://www.google.com/maps/embed/v1/place?key=${encodeURIComponent(GOOGLE_MAPS_EMBED_KEY)}&q=${encodeURIComponent(mapsQuery)}&language=it`
+  : null;
+const locationLines = c.location?.split(/\s*\n\s*/).filter(Boolean) ?? [];
+---
+
+<article class="flex flex-col gap-7" data-concert={c.slug}>
+  <header class="flex flex-col gap-3">
+    <span
+      class:list={[
+        'self-start rounded-[3px] px-2 py-0.5 text-[0.6875rem] tracking-[0.18em] uppercase',
+        next ? 'bg-signal text-white' : 'border border-line text-warm-ink',
+      ]}
+    >
+      {badge}
+    </span>
+    <h2 id="concerto-title" class="title-display text-3xl sm:text-4xl">
+      {c.venue}
+    </h2>
+    {(c.city || c.guests) && (
+      <p class="text-lg">
+        {c.city}
+        {c.city && c.guests && ' · '}
+        {c.guests && `con ${c.guests}`}
+      </p>
+    )}
+    <p class="text-warm-ink">
+      <time datetime={c.start}>{formatWhen(c, upcoming)}</time>
+    </p>
+  </header>
+
+  <VenueGallery slug={c.slug} venue={c.venue} photos={c.photoOverride} />
+
+  <section class="flex flex-col gap-3" aria-labelledby="concerto-luogo">
+    <h3 id="concerto-luogo" class="eyebrow">
+      Dove
+    </h3>
+    {locationLines.length > 0 ? (
+      <address class="not-italic">
+        {locationLines.map((line) => (
+          <span class="block">{line}</span>
+        ))}
+      </address>
+    ) : (
+      <p>{[c.venue, c.city].filter(Boolean).join(', ')}</p>
+    )}
+    <div class="flex flex-wrap gap-3">
+      <Button href={mapsUrl} variant="outline" size="sm" target="_blank" rel="noopener">
+        <Icon name="map-pin" size={18} />
+        Apri in Google Maps
+      </Button>
+      {embedUrl && (
+        <Button variant="ghost" size="sm" data-map-facade={embedUrl} aria-controls={`mappa-${c.slug}`}>
+          Mostra la mappa
+        </Button>
+      )}
+    </div>
+    {embedUrl && <div id={`mappa-${c.slug}`} class="concert-map" data-map-slot hidden />}
+  </section>
+
+  {c.links.length > 0 && (
+    <section class="flex flex-col gap-3" aria-labelledby="concerto-link">
+      <h3 id="concerto-link" class="eyebrow">
+        Link
+      </h3>
+      <ul class="flex flex-col gap-2">
+        {c.links.map((link) => (
+          <li>
+            <a
+              href={link.url}
+              target="_blank"
+              rel="noopener"
+              class="inline-flex items-center gap-2 underline underline-offset-4"
+            >
+              {link.label}
+              <Icon name="external-link" size={16} />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  {upcoming && (
+    <div class="flex flex-wrap gap-3 border-t border-line pt-6">
+      <Button href={`/concerti/${c.slug}.ics`} download={`kuf-${c.slug}.ics`}>
+        <Icon name="calendar-plus" size={18} />
+        Aggiungi al calendario
+      </Button>
+      <Button variant="outline" data-share data-share-url={url} data-share-title={`Kuf @ ${c.title}`}>
+        <Icon name="share-2" size={18} />
+        <span data-share-label>Condividi</span>
+      </Button>
+    </div>
+  )}
+</article>
+
+<style>
+  .concert-map {
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: var(--radius-card);
+    border: 1px solid var(--color-line);
+  }
+  .concert-map :global(iframe) {
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  @media (min-width: 768px) {
+    .concert-map {
+      aspect-ratio: 16 / 9;
+    }
+  }
+</style>

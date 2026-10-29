@@ -1,0 +1,201 @@
+---
+// Press kit (§7.9): download liberi, bio, formazione, discografia, video, recensioni e articoli.
+// Niente booking e niente ufficio stampa.
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import Card from '~/components/ui/Card.astro';
+import Icon from '~/components/ui/Icon.astro';
+import SectionTitle from '~/components/ui/SectionTitle.astro';
+import files from '~/content/press-files.json';
+import press from '~/content/press.json';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import { SITE } from '~/lib/site';
+import { getVideoMeta, watchUrl } from '~/lib/youtube';
+
+type PressLink = { anno: number; testata: string; url: string; verified: boolean; dead?: boolean };
+
+const albums = (await getCollection('albums')).sort((a, b) => b.data.anno - a.data.anno);
+const visible = (list: PressLink[]) => list.filter((l) => l.verified && !l.dead);
+const recensioni = visible(press.recensioni as PressLink[]);
+const articoli = visible(press.articoli as PressLink[]);
+
+// peso dei file: lo scrive scripts/build-press-logos.py in press-files.json
+const videos = albums.flatMap((a) => a.data.video.map((v) => ({ album: a, meta: getVideoMeta(v) })));
+const downloads = press.download.map((d) => ({
+  ...d,
+  peso: (files as Record<string, string>)[d.href] ?? '',
+}));
+---
+
+<BaseLayout
+  title={`Press kit · ${SITE.name}`}
+  description="Il press kit dei Kuf: scheda tecnica, stage plan, loghi, bio, formazione, dischi e recensioni."
+>
+  <div class="mx-auto flex max-w-5xl flex-col gap-20 px-5 py-14 sm:px-8 sm:py-20">
+    <SectionTitle level={1} title="Kuf" subtitle="Press kit" />
+
+    <section aria-labelledby="press-download" class="flex flex-col gap-6">
+      <h2 id="press-download" class="eyebrow">
+        Da scaricare
+      </h2>
+      <ul class="grid gap-4 md:grid-cols-3">
+        {downloads.map((d) => (
+          <li>
+            <a
+              href={d.href}
+              download
+              class="surface flex h-full items-start gap-4 p-5 transition-colors hover:border-ink/40"
+            >
+              <span class="grid size-11 shrink-0 place-items-center rounded-full bg-ink text-paper">
+                <Icon name="download" size={20} />
+              </span>
+              <span class="flex flex-col gap-1">
+                <span class="font-medium">{d.titolo}</span>
+                <span class="text-sm text-warm-ink">{d.descrizione}</span>
+                <span class="text-xs tracking-[0.12em] text-warm-ink uppercase">
+                  {d.formato}
+                  {d.peso && ` · ${d.peso}`}
+                </span>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+      <p class="text-sm text-warm-ink">
+        I loghi anche uno per uno:{' '}
+        {press.loghi.map((l, i) => (
+          <>
+            {i > 0 && ' · '}
+            {l.titolo} (
+            <a class="underline underline-offset-2" href={`/press/loghi/${l.file}.svg`} download>
+              SVG
+            </a>
+            ,{' '}
+            <a class="underline underline-offset-2" href={`/press/loghi/${l.file}.png`} download>
+              PNG
+            </a>
+            )
+          </>
+        ))}
+      </p>
+    </section>
+
+    <section aria-labelledby="press-bio" class="grid gap-10 md:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]">
+      <div class="flex flex-col gap-6">
+        <h2 id="press-bio" class="title-display text-3xl">
+          {press.bio.titolo}
+        </h2>
+        <blockquote class="border-l border-ink/40 pl-5 text-lg">
+          <p>{press.bio.testo}</p>
+          {press.bio.fonte.verified && (
+            <a
+              href={press.bio.fonte.url}
+              rel="noopener"
+              target="_blank"
+              class="mt-2 inline-block text-sm underline underline-offset-2"
+            >
+              {press.bio.fonte.label}
+            </a>
+          )}
+        </blockquote>
+        <ul class="flex flex-col gap-2">
+          {SITE.facts.map((f) => (
+            <li class="border-b border-line pb-2">{f}</li>
+          ))}
+        </ul>
+      </div>
+      <div class="flex flex-col gap-10">
+        <Card>
+          <h2 class="eyebrow mb-4">Formazione</h2>
+          <ul class="flex flex-col gap-2">
+            {press.formazione.map((p) => (
+              <li>
+                <span class="font-medium">{p.nome}</span> <span class="text-warm-ink">· {p.ruolo}</span>
+              </li>
+            ))}
+          </ul>
+        </Card>
+        <div>
+          <h2 class="eyebrow mb-4">Discografia</h2>
+          <ul class="flex flex-col gap-4">
+            {albums.map((a) => (
+              <li>
+                <a href={`/${a.id}`} class="group flex items-center gap-4">
+                  <Image
+                    src={a.data.cover}
+                    alt=""
+                    width={72}
+                    height={72}
+                    widths={[72, 144]}
+                    sizes="72px"
+                    class="size-[72px] rounded-[3px]"
+                  />
+                  <span>
+                    <span class="block font-medium group-hover:underline">{a.data.titolo}</span>
+                    <span class="text-sm text-warm-ink">
+                      {a.data.anno} · {a.data.tracklist.length} brani
+                    </span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section aria-labelledby="press-video" class="flex flex-col gap-4">
+      <h2 id="press-video" class="eyebrow">
+        Video
+      </h2>
+      <ul class="grid gap-x-10 sm:grid-cols-2">
+        {videos.map(({ album, meta }) => (
+          <li class="flex items-baseline justify-between gap-4 border-b border-line py-2.5">
+            <a
+              href={watchUrl(meta.id, meta.start)}
+              rel="noopener"
+              target="_blank"
+              class="underline-offset-4 hover:underline"
+            >
+              {meta.title}
+            </a>
+            <a href={`/${album.id}`} class="shrink-0 text-sm text-warm-ink hover:underline">
+              {album.data.titolo} · {album.data.anno}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section aria-labelledby="press-recensioni" class="grid gap-10 md:grid-cols-2">
+      <div>
+        <h2 id="press-recensioni" class="eyebrow mb-4">
+          Recensioni
+        </h2>
+        <ul class="flex flex-col">
+          {recensioni.map((l) => (
+            <li class="border-b border-line py-2.5">
+              <span class="mr-3 text-sm text-warm-ink tabular-nums">{l.anno}</span>
+              <a href={l.url} rel="noopener" target="_blank" class="underline-offset-4 hover:underline">
+                {l.testata}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <div>
+        <h2 class="eyebrow mb-4">Articoli</h2>
+        <ul class="flex flex-col">
+          {articoli.map((l) => (
+            <li class="border-b border-line py-2.5">
+              <span class="mr-3 text-sm text-warm-ink tabular-nums">{l.anno}</span>
+              <a href={l.url} rel="noopener" target="_blank" class="underline-offset-4 hover:underline">
+                {l.testata}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  </div>
+</BaseLayout>

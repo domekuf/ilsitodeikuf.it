@@ -45,7 +45,6 @@ test.describe('social dock', () => {
     ['Kuf su YouTube', 'https://www.youtube.com/channel/UCTWu6UbxU95DmHe3LJIHbrw'],
     ['Kuf su Instagram', 'https://www.instagram.com/kuf.quellichesuonano'],
     ['Kuf su Spotify', 'https://open.spotify.com/artist/19RHxgdzVkXbRI6IcwMPz3'],
-    ['Kuf su SoundCloud', 'https://soundcloud.com/kuf-4'],
   ] as const;
 
   test('desktop: colonna sempre visibile con tooltip', async ({ page }, info) => {

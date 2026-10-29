@@ -1,0 +1,97 @@
+---
+// Form contatti condiviso (§6.2): modale Contattaci e dettaglio articoli.
+// Invio con l'Action `contatto` (src/scripts/forms.ts): Turnstile, rate limit, D1, mail alla band.
+import Button from '~/components/ui/Button.astro';
+import { SITE } from '~/lib/site';
+import ConsentCheckbox from './ConsentCheckbox.astro';
+import Turnstile from './Turnstile.astro';
+
+interface Props {
+  idPrefix: string;
+  subject?: string | undefined;
+  context?: { type: 'articolo'; slug: string; nome: string } | undefined;
+  placeholder?: string | undefined;
+}
+
+const { idPrefix, subject, context, placeholder = 'Scrivici quello che vuoi' } = Astro.props;
+const id = (name: string) => `${idPrefix}-${name}`;
+---
+
+<div>
+  <form class="flex flex-col gap-5" method="post" novalidate data-form="contatto">
+    {subject && <input type="hidden" name="subject" value={subject} />}
+    {context && <input type="hidden" name="context" value={JSON.stringify(context)} />}
+    <input type="hidden" name="page" value="" />
+    <div class="field">
+      <label for={id('name')} class="field__label">
+        Nome
+      </label>
+      <input
+        id={id('name')}
+        name="name"
+        class="field__control"
+        autocomplete="name"
+        required
+        maxlength="100"
+      />
+    </div>
+    <div class="field">
+      <label for={id('email')} class="field__label">
+        Email
+      </label>
+      <input
+        id={id('email')}
+        name="email"
+        type="email"
+        class="field__control"
+        autocomplete="email"
+        inputmode="email"
+        required
+        maxlength="200"
+      />
+    </div>
+    <div class="field">
+      <label for={id('message')} class="field__label">
+        Messaggio
+      </label>
+      <textarea
+        id={id('message')}
+        name="message"
+        class="field__control"
+        required
+        maxlength="5000"
+        placeholder={placeholder}
+      ></textarea>
+    </div>
+    <!-- honeypot: invisibile alle persone, i bot lo compilano -->
+    <div class="visually-hidden" aria-hidden="true">
+      <label for={id('website')}>Lascia vuoto</label>
+      <input id={id('website')} name="website" tabindex="-1" autocomplete="off" />
+    </div>
+    <ConsentCheckbox idPrefix={idPrefix} purpose="contact" />
+    <Turnstile />
+    <div class="flex flex-col gap-3">
+      <div>
+        <Button type="submit">
+          <span data-label="Invia">Invia</span>
+        </Button>
+      </div>
+      <p class="form-status text-sm" role="status" aria-live="polite" data-form-status></p>
+      <noscript>
+        <p class="text-sm text-warm-ink">
+          Per inviare il modulo serve JavaScript (ci protegge dallo spam). Puoi sempre scriverci a{' '}
+          {SITE.email}.
+        </p>
+      </noscript>
+    </div>
+  </form>
+  <div class="surface flex flex-col items-start gap-4 p-6" data-form-done hidden tabindex="-1">
+    <p class="title-display text-xl" data-done-text>
+      Grazie di averci scritto!
+    </p>
+    <p class="text-warm-ink">Ti rispondiamo appena possiamo, di solito in pochi giorni.</p>
+    <Button variant="outline" size="sm" data-form-again>
+      Scrivi un altro messaggio
+    </Button>
+  </div>
+</div>

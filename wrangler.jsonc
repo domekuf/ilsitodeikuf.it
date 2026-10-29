@@ -5,11 +5,13 @@
   "main": "./src/worker.ts",
   "compatibility_date": "2026-10-20",
   // Niente nodejs_compat finché non serve davvero.
-  "observability": { "enabled": true },
-
+  "observability": {
+    "enabled": true,
+  },
   // Cron Trigger giornaliero per la retention dei dati (§8.5), alle 03:17 UTC.
-  "triggers": { "crons": ["17 3 * * *"] },
-
+  "triggers": {
+    "crons": ["17 3 * * *"],
+  },
   // Binding. Gli ID mancanti vanno compilati quando crei le risorse (vedi README, "Passi manuali").
   // In locale (astro dev / wrangler dev) funzionano comunque, simulati da Miniflare.
   "d1_databases": [
@@ -18,18 +20,44 @@
       "database_name": "kuf-sito",
       "migrations_dir": "migrations",
     },
+    {
+      "binding": "kuf_sito",
+      "database_name": "kuf-sito",
+      "database_id": "5efa20a5-0c5a-4443-bba9-8a7b071afbb4",
+      "remote": true,
+    },
   ],
-  "kv_namespaces": [{ "binding": "CACHE" }],
-  "r2_buckets": [{ "binding": "DOWNLOADS", "bucket_name": "kuf-downloads" }],
+  "kv_namespaces": [
+    {
+      "binding": "CACHE",
+      "id": "23cd1c46d3764a4ab319957cf3f44944",
+      "remote": true,
+    },
+  ],
+  "r2_buckets": [
+    {
+      "binding": "DOWNLOADS",
+      "bucket_name": "kuf-downloads",
+    },
+    {
+      "bucket_name": "kuf-downloads",
+      "binding": "kuf_downloads",
+      "remote": true,
+    },
+  ],
   "ratelimits": [
     {
       // ADR-012: il binding accetta solo periodi di 10 o 60 secondi.
       "name": "FORM_LIMITER",
       "namespace_id": "1001",
-      "simple": { "limit": 3, "period": 60 },
+      "simple": {
+        "limit": 3,
+        "period": 60,
+      },
     },
   ],
-
+  // Provider email alternativo (Cloudflare Email Service, beta, Workers Paid): scommentare e usare MAIL_PROVIDER=cloudflare.
+  // "send_email": [{ "name": "EMAIL" }],
   // Variabili non segrete. I secret si impostano con `wrangler secret put` (vedi README).
   "vars": {
     "CALENDAR_QUERY": "Kuf @",
@@ -40,11 +68,11 @@
     "MAIL_TO": "kuf.ravenna@gmail.com",
     "CONSENT_TEXT_VERSION": "2026-11-v1",
     "RETENTION_MONTHS": "24",
+    // Chiave pubblica della Maps Embed API (ristretta per referrer): vuota = niente "Mostra la mappa".
+    "GOOGLE_MAPS_EMBED_KEY": "",
   },
-
-  // Dominio custom: si attiva solo al primo deploy, dopo il tuo ok (Fase 7).
-  // "routes": [
-  //   { "pattern": "ilsitodeikuf.it", "custom_domain": true },
-  //   { "pattern": "www.ilsitodeikuf.it", "custom_domain": true }
-  // ],
+  "routes": [
+    { "pattern": "ilsitodeikuf.it", "custom_domain": true },
+    { "pattern": "www.ilsitodeikuf.it", "custom_domain": true }
+  ],
 }

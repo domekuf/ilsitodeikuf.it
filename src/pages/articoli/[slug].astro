@@ -1,0 +1,15 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { getCollection } from 'astro:content';
+import ArticoliPage from '~/components/articoli/ArticoliPage.astro';
+
+export const getStaticPaths = (async () =>
+  (await getCollection('articoli')).map((item) => ({
+    params: { slug: item.id },
+    props: { item },
+  }))) satisfies GetStaticPaths;
+
+const { item } = Astro.props;
+---
+
+<ArticoliPage open={item} />

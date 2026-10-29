@@ -6,6 +6,7 @@ import Footer from '~/components/layout/Footer.astro';
 import Header from '~/components/layout/Header.astro';
 import MenuOverlay from '~/components/layout/MenuOverlay.astro';
 import SocialDock from '~/components/social/SocialDock.astro';
+import { DOCK_SEEN_SCRIPT } from '~/lib/inline-scripts.mjs';
 import { SITE, cleanPath } from '~/lib/site';
 
 interface Props {
@@ -16,6 +17,8 @@ interface Props {
   noindex?: boolean;
   /** /contattaci: la modale dei contatti arriva già aperta */
   contactOpen?: boolean;
+  /** immagine Open Graph (URL assoluto) */
+  image?: string | undefined;
 }
 
 const {
@@ -24,6 +27,7 @@ const {
   canonical,
   noindex = false,
   contactOpen = false,
+  image,
 } = Astro.props;
 const canonicalUrl = new URL(canonical ?? cleanPath(Astro.url.pathname), Astro.site);
 ---
@@ -38,15 +42,22 @@ const canonicalUrl = new URL(canonical ?? cleanPath(Astro.url.pathname), Astro.s
     <link rel="canonical" href={canonicalUrl} />
     {noindex && <meta name="robots" content="noindex" />}
     <meta name="theme-color" content="#FBFAF7" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:locale" content="it_IT" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    {image && <meta property="og:image" content={image} />}
+    <meta name="twitter:card" content={image ? 'summary_large_image' : 'summary'} />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <Font cssVariable="--font-walkway" preload />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <Font cssVariable="--font-montserrat" preload />
     <Font cssVariable="--font-inter" preload />
-    <script is:inline>
-      // l'ingresso animato del FAB si vede solo alla prima pagina della sessione
-      try {
-        if (sessionStorage.getItem('kuf-dock-seen')) document.documentElement.classList.add('dock-seen');
-      } catch {}
-    </script>
+    <script is:inline set:html={DOCK_SEEN_SCRIPT} />
+    <slot name="head" />
   </head>
   <body>
     <a
@@ -65,8 +76,19 @@ const canonicalUrl = new URL(canonical ?? cleanPath(Astro.url.pathname), Astro.s
     <ContactModal open={contactOpen} />
     <slot name="modals" />
     <script>
+      import { initForms } from '~/scripts/forms';
       import { initModalRouter } from '~/scripts/modal-router';
       initModalRouter();
+      initForms();
     </script>
+    {SITE.analyticsToken && (
+      // Cloudflare Web Analytics: niente cookie, niente dati personali (ADR-062)
+      <script
+        is:inline
+        defer
+        src="https://static.cloudflareinsights.com/beacon.min.js"
+        data-cf-beacon={JSON.stringify({ token: SITE.analyticsToken })}
+      />
+    )}
   </body>
 </html>

@@ -1,0 +1,112 @@
+---
+// Pagina di un disco (§7.7, §7.8): cover, tracklist, download, video, link d'ascolto.
+import type { CollectionEntry } from 'astro:content';
+import { Image, getImage } from 'astro:assets';
+import DownloadForm from '~/components/forms/DownloadForm.astro';
+import Card from '~/components/ui/Card.astro';
+import Icon from '~/components/ui/Icon.astro';
+import SectionTitle from '~/components/ui/SectionTitle.astro';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import { SITE } from '~/lib/site';
+import VideoList from './VideoList.astro';
+
+interface Props {
+  album: CollectionEntry<'albums'>;
+}
+
+const { album } = Astro.props;
+const a = album.data;
+const slug = album.id as 'pigna' | 'via-trieste';
+const og = await getImage({ src: a.cover, width: 1200, height: 1200, format: 'jpg' });
+const ogUrl = new URL(og.src, Astro.site).href;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'MusicAlbum',
+  name: a.titolo,
+  datePublished: String(a.anno),
+  image: ogUrl,
+  url: new URL(`/${slug}`, Astro.site).href,
+  byArtist: { '@type': 'MusicGroup', name: 'Kuf', url: Astro.site?.href },
+  numTracks: a.tracklist.length,
+  track: a.tracklist.map((name, i) => ({ '@type': 'MusicRecording', name, position: i + 1 })),
+};
+---
+
+<BaseLayout
+  title={`${a.titolo} (${a.anno}) · ${SITE.name}`}
+  description={`${a.titolo}, ${a.sottotitolo.toLowerCase()} (${a.anno}). Ascoltalo e scaricalo gratis.`}
+  image={ogUrl}
+>
+  <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} slot="head" />
+  <div class="mx-auto flex max-w-6xl flex-col gap-20 px-5 py-14 sm:px-8 sm:py-20">
+    <section class="grid items-start gap-10 md:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] md:gap-14">
+      <div class="md:sticky md:top-8">
+        <Image
+          src={a.cover}
+          alt={a.coverAlt}
+          widths={[360, 560, 800, 1120]}
+          sizes="(min-width: 1152px) 520px, (min-width: 768px) 44vw, 100vw"
+          loading="eager"
+          fetchpriority="high"
+          class="aspect-square w-full rounded-[3px] shadow-[0_10px_30px_rgb(20_20_20/0.14)]"
+        />
+      </div>
+
+      <div class="flex flex-col gap-10">
+        <SectionTitle level={1} align="left" title={a.titolo} subtitle={`${a.sottotitolo} · ${a.anno}`} />
+
+        <section aria-labelledby="tracklist-title">
+          <h2 id="tracklist-title" class="eyebrow mb-3">
+            Tracklist
+          </h2>
+          <ol class="divide-y divide-line border-y border-line">
+            {a.tracklist.map((t, i) => (
+              <li class="flex items-baseline gap-4 py-2.5">
+                <span class="w-6 text-right font-display text-sm text-warm-ink tabular-nums">{i + 1}</span>
+                <span>{t}</span>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        <Card class="sm:p-8">
+          <DownloadForm album={slug} titolo={a.titolo} />
+        </Card>
+
+        {a.ascolta.length > 0 && (
+          <section aria-labelledby="ascolta-title">
+            <h2 id="ascolta-title" class="eyebrow mb-3">
+              Ascolta anche su
+            </h2>
+            <ul class="flex flex-wrap gap-x-6 gap-y-2">
+              {a.ascolta.map((l) => (
+                <li>
+                  <a
+                    href={l.url}
+                    rel="noopener"
+                    target="_blank"
+                    class="inline-flex items-center gap-1.5 underline-offset-4 hover:underline"
+                  >
+                    {l.label} <Icon name="arrow-up-right" size={15} />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+      </div>
+    </section>
+
+    {a.video.length > 0 && (
+      <section aria-labelledby="video-title" class="flex flex-col gap-10">
+        <SectionTitle
+          id="video-title"
+          title="I video"
+          subtitle={slug === 'via-trieste' ? 'Del passato dei Kuf' : `Di ${a.titolo}`}
+        />
+        <VideoList videos={a.video} />
+      </section>
+    )}
+  </div>
+</BaseLayout>

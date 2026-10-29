@@ -1,0 +1,56 @@
+---
+// Dettaglio di un articolo nella modale (§7.6). Nessun prezzo, da nessuna parte.
+import { render, type CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import ContactForm from '~/components/forms/ContactForm.astro';
+
+interface Props {
+  item: CollectionEntry<'articoli'>;
+}
+
+const { item } = Astro.props;
+const a = item.data;
+const { Content } = await render(item);
+const photos = [{ src: a.immagine, alt: a.alt }, ...a.galleria];
+---
+
+<article class="grid gap-8 md:grid-cols-2 md:gap-10">
+  <div class="flex flex-col gap-3">
+    {photos.map((p, i) => (
+      <Image
+        src={p.src}
+        alt={p.alt}
+        widths={[400, 640, 900]}
+        sizes="(min-width: 960px) 440px, (min-width: 768px) 45vw, 100vw"
+        loading={i === 0 ? 'eager' : 'lazy'}
+        class="aspect-[4/5] w-full rounded-[var(--radius-card)] object-cover"
+      />
+    ))}
+  </div>
+  <div class="flex flex-col gap-6">
+    <header class="flex flex-col gap-2">
+      {!a.disponibile && (
+        <span class="self-start rounded-[3px] border border-line px-2 py-0.5 text-[0.6875rem] tracking-[0.18em] text-warm-ink uppercase">
+          Finito
+        </span>
+      )}
+      <h2 id="articolo-title" class="title-display text-2xl sm:text-3xl">
+        {a.nome}
+      </h2>
+    </header>
+    <div class="prose-kuf flex flex-col gap-3 text-warm-ink empty:hidden">
+      <Content />
+    </div>
+    <p>
+      {a.disponibile
+        ? 'Lo vuoi? Scrivici qui sotto: ci mettiamo d’accordo noi.'
+        : 'È finito. Se vuoi, scrivici e ti avvisiamo se torna.'}
+    </p>
+    <ContactForm
+      idPrefix={`art-${item.id}`}
+      subject={a.disponibile ? `Vorrei: ${a.nome}` : `Avvisatemi se torna: ${a.nome}`}
+      context={{ type: 'articolo', slug: item.id, nome: a.nome }}
+      placeholder="Scrivici taglia, quantità e come preferisci ritirarla"
+    />
+  </div>
+</article>

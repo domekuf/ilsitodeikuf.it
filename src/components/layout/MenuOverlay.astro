@@ -1,5 +1,5 @@
 ---
-// Menu a schermo intero su carta, link enormi in Walkway con ingresso sfalsato.
+// Menu a schermo intero su carta, link enormi in Montserrat Light con ingresso sfalsato.
 // È un <dialog> nativo: focus trap, Esc e ripristino del focus gratis.
 import Logo from '~/assets/logo/kuf-wordmark-compact.svg';
 import Icon from '~/components/ui/Icon.astro';
@@ -24,8 +24,8 @@ const { pathname } = Astro.url;
     </div>
     <nav aria-label="Menu" class="flex flex-1 items-center py-8">
       <ul class="flex flex-col gap-1 sm:gap-2">
-        {SITE.nav.map((item, i) => (
-          <li class="menu__item" style={`--i:${i}`}>
+        {SITE.nav.map((item) => (
+          <li class="menu__item">
             <a
               href={item.href}
               data-modal-link={item.modal}
@@ -44,6 +44,32 @@ const { pathname } = Astro.url;
 </dialog>
 
 <style>
+  /* indice per l'ingresso sfalsato (niente attributi style: CSP) */
+  .menu__item:nth-child(1) {
+    --i: 0;
+  }
+  .menu__item:nth-child(2) {
+    --i: 1;
+  }
+  .menu__item:nth-child(3) {
+    --i: 2;
+  }
+  .menu__item:nth-child(4) {
+    --i: 3;
+  }
+  .menu__item:nth-child(5) {
+    --i: 4;
+  }
+  .menu__item:nth-child(6) {
+    --i: 5;
+  }
+  .menu__item:nth-child(7) {
+    --i: 6;
+  }
+  .menu__item:nth-child(8) {
+    --i: 7;
+  }
+
   .menu {
     width: 100%;
     max-width: none;

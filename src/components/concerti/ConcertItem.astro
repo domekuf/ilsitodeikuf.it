@@ -1,0 +1,116 @@
+---
+// Una riga della lista concerti: tutta la card apre la modale di dettaglio (§7.2).
+import Icon from '~/components/ui/Icon.astro';
+import type { Concert } from '~/lib/calendar';
+import { dateParts, formatShortDate } from '~/lib/dates';
+
+interface Props {
+  concert: Concert;
+  /** il prossimo concerto: card più grande e badge */
+  featured?: boolean;
+}
+
+const { concert: c, featured = false } = Astro.props;
+const d = dateParts(c.start);
+const meta = [c.city, c.guests && `con ${c.guests}`].filter(Boolean).join(' · ');
+---
+
+<a
+  href={`/concerti/${c.slug}`}
+  data-modal-link="concerto"
+  class:list={['concert-item group', featured && 'concert-item--featured']}
+>
+  <span class="concert-item__date" aria-hidden="true">
+    <span class="concert-item__day">{d.day}</span>
+    <span class="concert-item__month">{d.month}</span>
+  </span>
+  <span class="flex min-w-0 flex-col gap-1">
+    {featured && <span class="concert-item__badge">Il prossimo</span>}
+    <span class="concert-item__venue">{c.venue}</span>
+    <span class="text-sm text-warm-ink">
+      <time datetime={c.start}>{formatShortDate(c.start)}</time>
+      {meta && ` · ${meta}`}
+    </span>
+  </span>
+  <Icon name="arrow-right" size={20} class="concert-item__arrow" />
+</a>
+
+<style>
+  .concert-item {
+    display: grid;
+    grid-template-columns: 3.5rem 1fr auto;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0.25rem;
+    border-bottom: 1px solid var(--color-line);
+    transition: background-color var(--duration-fast) var(--ease-soft);
+  }
+  .concert-item:hover {
+    background: rgb(20 20 20 / 0.03);
+  }
+  .concert-item:focus-visible {
+    outline: 2px solid var(--color-ink);
+    outline-offset: 2px;
+  }
+  .concert-item__date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1;
+  }
+  .concert-item__day {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 300;
+  }
+  .concert-item__month {
+    margin-top: 0.25rem;
+    font-size: 0.6875rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-warm-ink);
+  }
+  .concert-item__venue {
+    font-size: 1.0625rem;
+    font-weight: 500;
+    overflow-wrap: anywhere;
+  }
+  .concert-item__badge {
+    align-self: flex-start;
+    border-radius: 3px;
+    background: var(--color-signal);
+    color: #fff;
+    padding: 0.125rem 0.5rem;
+    font-size: 0.6875rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .concert-item :global(.concert-item__arrow) {
+    color: var(--color-warm-ink);
+    transition: translate var(--duration-fast) var(--ease-soft);
+  }
+  .concert-item:hover :global(.concert-item__arrow) {
+    translate: 4px 0;
+    color: var(--color-ink);
+  }
+
+  .concert-item--featured {
+    grid-template-columns: 5rem 1fr auto;
+    padding: 1.5rem;
+    border: 1px solid var(--color-ink);
+    border-radius: var(--radius-card);
+    background: var(--color-surface);
+    margin-bottom: 0.75rem;
+  }
+  .concert-item--featured .concert-item__day {
+    font-size: 3rem;
+  }
+  .concert-item--featured .concert-item__venue {
+    font-family: var(--font-display);
+    font-weight: 300;
+    font-size: 1.75rem;
+    line-height: 1.15;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+</style>

@@ -1,0 +1,60 @@
+---
+// Revoca del consenso agli aggiornamenti (§7.10). GET mostra solo un bottone:
+// la revoca avviene con il POST, così i "prefetch" dei client di posta non la fanno scattare.
+import { CONSENT_TEXT_VERSION, UNSUBSCRIBE_TOKEN_SECRET } from 'astro:env/server';
+import { env } from 'cloudflare:workers';
+import Button from '~/components/ui/Button.astro';
+import SectionTitle from '~/components/ui/SectionTitle.astro';
+import BaseLayout from '~/layouts/BaseLayout.astro';
+import { getUnsubscribeSalt, revokeUpdates } from '~/lib/db/contacts';
+import { SITE } from '~/lib/site';
+import { readUnsubscribeToken } from '~/lib/tokens';
+
+export const prerender = false;
+
+const db = (env as unknown as Partial<Env>).DB;
+const token = Astro.params.token ?? '';
+const check = UNSUBSCRIBE_TOKEN_SECRET ? await readUnsubscribeToken(token, UNSUBSCRIBE_TOKEN_SECRET) : null;
+
+let state: 'confirm' | 'done' | 'invalid' = 'invalid';
+if (check?.ok && db) {
+  const salt = await getUnsubscribeSalt(db, check.payload.c);
+  if (salt && salt === check.payload.n) {
+    state = 'confirm';
+    if (Astro.request.method === 'POST') {
+      await revokeUpdates(db, check.payload.c, CONSENT_TEXT_VERSION);
+      state = 'done';
+    }
+  }
+}
+if (state === 'invalid') Astro.response.status = 404;
+Astro.response.headers.set('Cache-Control', 'no-store');
+---
+
+<BaseLayout title={`Notizie dai Kuf · ${SITE.name}`} noindex>
+  <section class="mx-auto flex max-w-xl flex-col items-center gap-8 px-5 py-24 text-center">
+    <SectionTitle level={1} title="Notizie dai Kuf" subtitle="Disiscrizione" />
+    {state === 'confirm' && (
+      <>
+        <p>Vuoi smettere di ricevere notizie dai Kuf? Ci mancherai, ma è una scelta tua.</p>
+        <form method="post">
+          <Button type="submit">Non voglio più ricevere notizie</Button>
+        </form>
+      </>
+    )}
+    {state === 'done' && (
+      <p role="status">
+        Fatto: da ora non ti scriviamo più. Se cambi idea, basta spuntare la casella la prossima volta che
+        scarichi un disco o ci scrivi.
+      </p>
+    )}
+    {state === 'invalid' && (
+      <p>
+        Questo link non funziona più. Se vuoi essere cancellato, scrivici a {SITE.email} e lo facciamo noi.
+      </p>
+    )}
+    <Button href="/" variant="outline">
+      Torna alla home
+    </Button>
+  </section>
+</BaseLayout>

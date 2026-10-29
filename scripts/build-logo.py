@@ -8,8 +8,12 @@ import math
 from pathlib import Path
 
 H = 167.0  # altezza delle lettere (unità del disegno originale)
-ARM = -1.36  # pendenza del braccio della K (dx/dy)
-LEG = 1.07  # pendenza della gamba della K (dx/dy)
+# Larghezze bilanciate (v2): nell'originale la K era 157, la U 141 e la F 117: la K pesava troppo.
+K_WIDTH = 136.0
+U_WIDTH = 138.0
+F_WIDTH = 114.0
+ARM_JOIN = 100.0  # altezza a cui il braccio della K incontra l'asta (bordo esterno)
+LEG = 1.0  # pendenza della gamba della K (dx/dy): 45°
 
 
 def f(n: float) -> str:
@@ -23,12 +27,13 @@ def poly(points):
 
 def letter_k(x0: float, s: float):
     """K: asta, braccio (taglio orizzontale in alto) e gamba (taglio orizzontale in basso)."""
-    width = 157.0
+    width = K_WIDTH
+    ARM = -(width - 6 - s) / ARM_JOIN  # pendenza del braccio (dx/dy), dipende dalla larghezza
     arm_w = s * math.sqrt(1 + ARM**2)  # larghezza orizzontale del braccio
     leg_w = s * math.sqrt(1 + LEG**2)
     stem = poly([(x0, 0), (x0 + s, 0), (x0 + s, H), (x0, H)])
     # braccio: bordo esterno parte da (width - 7, 0) e scende fino all'asta
-    ax_out = x0 + width - 7
+    ax_out = x0 + width - 6
     ax_in = ax_out - arm_w
     y_out = (ax_out - (x0 + s)) / -ARM
     y_in = (ax_in - (x0 + s)) / -ARM
@@ -46,7 +51,7 @@ def letter_k(x0: float, s: float):
 
 
 def letter_u(x0: float, s: float):
-    width = 141.0
+    width = U_WIDTH
     r_out = width / 2
     r_in = r_out - s
     b = H - r_out
@@ -58,12 +63,12 @@ def letter_u(x0: float, s: float):
 
 
 def letter_f(x0: float, s: float):
-    width = 117.0
+    width = F_WIDTH
     mid = 78.5  # barra centrale un filo sopra il centro (correzione ottica, come nell'originale)
     return [
         poly([(x0, 0), (x0 + s, 0), (x0 + s, H), (x0, H)]),
         poly([(x0, 0), (x0 + width, 0), (x0 + width, s), (x0, s)]),
-        poly([(x0, mid - s / 2), (x0 + 102, mid - s / 2), (x0 + 102, mid + s / 2), (x0, mid + s / 2)]),
+        poly([(x0, mid - s / 2), (x0 + width - 15, mid - s / 2), (x0 + width - 15, mid + s / 2), (x0, mid + s / 2)]),
     ], width
 
 
@@ -89,11 +94,11 @@ out = Path(__file__).resolve().parent.parent / "src/assets/logo"
 out.mkdir(parents=True, exist_ok=True)
 
 # 1. Wordmark completo: tratto sottile come l'originale, spaziatura ottica corretta (K-U era 6, U-F 20).
-p, w = wordmark(12.5, 14, 18)
+p, w = wordmark(12.5, 16, 18)
 (out / "kuf-wordmark.svg").write_text(svg(p, w, H, "KUF"))
 
 # 2. Wordmark compatto per l'header: tratto più pieno (si legge anche a 20-24 px) e più aria tra le lettere.
-p, w = wordmark(17, 20, 24)
+p, w = wordmark(17, 22, 24)
 (out / "kuf-wordmark-compact.svg").write_text(svg(p, w, H, "KUF"))
 
 # 3. Monogramma K per favicon: tratto pesante, centrato in un quadrato con area di rispetto.

@@ -1,0 +1,64 @@
+---
+// Segnaposto del prossimo concerto mentre arriva la server island: stessa sagoma, niente salti.
+---
+
+<div class="skeleton" aria-busy="true" aria-label="Sto cercando il prossimo concerto">
+  <span class="skeleton__date"></span>
+  <span class="flex flex-col gap-3">
+    <span class="skeleton__line w-3/5"></span>
+    <span class="skeleton__line w-2/5"></span>
+    <span class="skeleton__line w-4/5"></span>
+    <span class="skeleton__line mt-3 h-10 w-1/2"></span>
+  </span>
+</div>
+
+<style>
+  .skeleton {
+    display: grid;
+    grid-template-columns: 3.25rem 1fr;
+    gap: 1rem;
+    padding: 1.25rem;
+    min-height: 13.5rem;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-card);
+    background: var(--color-surface);
+  }
+  .skeleton__date,
+  .skeleton__line {
+    display: block;
+    border-radius: 4px;
+    background: linear-gradient(
+      100deg,
+      rgb(20 20 20 / 0.05) 30%,
+      rgb(20 20 20 / 0.1) 50%,
+      rgb(20 20 20 / 0.05) 70%
+    );
+    background-size: 300% 100%;
+    animation: shimmer 1.3s linear infinite;
+  }
+  .skeleton__date {
+    height: 5rem;
+  }
+  .skeleton__line {
+    height: 1.1rem;
+  }
+  @keyframes shimmer {
+    to {
+      background-position: -150% 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .skeleton__date,
+    .skeleton__line {
+      animation: none;
+    }
+  }
+  @media (min-width: 640px) {
+    .skeleton {
+      grid-template-columns: 4.5rem 1fr;
+      gap: 2.5rem;
+      padding: 2.25rem 2.5rem;
+      min-height: 15rem;
+    }
+  }
+</style>

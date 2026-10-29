@@ -31,6 +31,16 @@ const colors = [
   { name: 'warm-dark', hex: '#575042', use: 'hover, contrasto', ratio: '7,7:1' },
   { name: 'signal', hex: '#A84B24', use: 'solo badge "prossimo"', ratio: '5,7:1 (bianco su)' },
 ];
+// classi intere (Tailwind le deve trovare scritte così); niente style inline per la CSP
+const swatch: Record<string, string> = {
+  paper: 'bg-paper',
+  surface: 'bg-surface',
+  ink: 'bg-ink',
+  warm: 'bg-warm',
+  'warm-ink': 'bg-warm-ink',
+  'warm-dark': 'bg-warm-dark',
+  signal: 'bg-signal',
+};
 const iconNames = Object.keys(icons) as IconName[];
 ---
 
@@ -49,8 +59,8 @@ const iconNames = Object.keys(icons) as IconName[];
             <Wordmark aria-hidden="true" class="h-16 w-auto" />
           </div>
           <p class="text-sm">
-            <strong>Wordmark completo.</strong> Tratto sottile come l'originale, spaziatura ottica sistemata
-            (K–U più aria, U–F meno).
+            <strong>Wordmark completo.</strong> Tratto sottile come l'originale, lettere bilanciate (la K non
+            è più la più larga) e spaziatura ottica sistemata.
           </p>
         </Card>
         <Card class="flex flex-col gap-4">
@@ -100,7 +110,7 @@ const iconNames = Object.keys(icons) as IconName[];
         <p class="title-display text-6xl sm:text-7xl">Concerti</p>
         <p class="title-display text-4xl">Le cose da avere dei Kuf</p>
         <p class="title-display text-2xl">Via Trieste · 2015</p>
-        <p class="font-display text-5xl font-bold tracking-wide">17 NOV</p>
+        <p class="font-display text-5xl font-light tracking-wide">17 NOV</p>
       </div>
       <SectionTitle title="Titolo di sezione" subtitle="Con il separatore sottile, omaggio al vecchio sito" />
       <div class="prose-kuf flex flex-col gap-4">
@@ -123,7 +133,7 @@ const iconNames = Object.keys(icons) as IconName[];
       <ul class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {colors.map((c) => (
           <li class="surface overflow-hidden">
-            <div class="h-20 border-b border-line" style={`background:${c.hex}`} />
+            <div class:list={['h-20 border-b border-line', swatch[c.name]]} />
             <div class="p-4 text-sm">
               <p class="font-medium">{c.name}</p>
               <p class="font-mono text-xs">{c.hex}</p>
@@ -162,7 +172,7 @@ const iconNames = Object.keys(icons) as IconName[];
       <div class="grid items-start gap-6 md:grid-cols-2">
         <Card class="flex items-center gap-6">
           <div class="border-r border-line pr-6 text-center">
-            <p class="font-display text-5xl leading-none font-bold">13</p>
+            <p class="font-display text-5xl leading-none font-light">13</p>
             <p class="eyebrow mt-1">Dic</p>
           </div>
           <div>

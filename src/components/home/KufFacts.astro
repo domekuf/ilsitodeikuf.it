@@ -1,0 +1,92 @@
+---
+// "Cose vere sui Kuf" (§7.1): una frase alla volta, "Dimmi un'altra cosa vera" passa alla successiva.
+// Senza JS si vedono tutte, in lista.
+import { SITE } from '~/lib/site';
+---
+
+<div class="facts" data-facts>
+  <ol class="facts__list" aria-live="polite">
+    {SITE.facts.map((fact, i) => (
+      <li class="facts__item" data-fact={i}>
+        <p class="title-display facts__text">{fact}</p>
+      </li>
+    ))}
+  </ol>
+  <button type="button" class="facts__next" data-facts-next hidden>
+    Dimmi un’altra cosa vera
+  </button>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-facts]').forEach((root) => {
+    const items = [...root.querySelectorAll<HTMLElement>('[data-fact]')];
+    const button = root.querySelector<HTMLButtonElement>('[data-facts-next]');
+    if (!button || items.length < 2) return;
+    let current = 0;
+    const show = (index: number) => {
+      items.forEach((item, i) => {
+        item.hidden = i !== index;
+      });
+    };
+    root.classList.add('facts--one');
+    show(current);
+    button.hidden = false;
+    button.addEventListener('click', () => {
+      current = (current + 1) % items.length;
+      show(current);
+    });
+  });
+</script>
+
+<style>
+  .facts {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    text-align: center;
+  }
+  .facts__list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    max-width: 46rem;
+  }
+  .facts__text {
+    font-size: clamp(1.5rem, 4.5vw, 2.5rem);
+    line-height: 1.25;
+    text-transform: none;
+    letter-spacing: 0.01em;
+  }
+  /* con JS: una frase alla volta, sempre nello stesso spazio */
+  .facts--one .facts__list {
+    display: grid;
+    min-height: 9em;
+    align-items: center;
+  }
+  .facts--one .facts__item:not([hidden]) {
+    animation: fact-in var(--duration-slow) var(--ease-soft);
+  }
+  @keyframes fact-in {
+    from {
+      opacity: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .facts--one .facts__item:not([hidden]) {
+      animation: none;
+    }
+  }
+  .facts__next {
+    font-size: 0.8125rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-decoration: underline;
+    text-underline-offset: 6px;
+    min-height: 2.75rem;
+    padding: 0 0.5rem;
+  }
+  .facts__next:hover {
+    color: var(--color-warm-dark);
+  }
+</style>

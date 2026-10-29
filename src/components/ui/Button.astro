@@ -11,7 +11,16 @@ type Props = (HTMLAttributes<'a'> | HTMLAttributes<'button'>) & {
   href?: string;
 };
 
-const { variant = 'solid', size = 'md', href, class: className, ...rest } = Astro.props;
+const {
+  variant = 'solid',
+  size = 'md',
+  href,
+  type = 'button',
+  class: className,
+  ...rest
+} = Astro.props as Props & {
+  type?: 'button' | 'submit' | 'reset';
+};
 
 const base =
   'inline-flex items-center justify-center gap-2 rounded-[var(--radius-control)] font-medium uppercase tracking-[0.12em] transition-colors duration-150 ease-[var(--ease-soft)] disabled:cursor-not-allowed disabled:opacity-50';
@@ -32,7 +41,7 @@ const classes = [base, sizes[size], variants[variant], className].filter(Boolean
     <slot />
   </a>
 ) : (
-  <button type="button" class={classes} {...(rest as HTMLAttributes<'button'>)}>
+  <button type={type} class={classes} {...(rest as HTMLAttributes<'button'>)}>
     <slot />
   </button>
 )}

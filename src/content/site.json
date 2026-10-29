@@ -2,6 +2,8 @@
   "name": "Il Sito dei Kuf",
   "claim": "Un gruppo di Ravenna che, a volte, fa la musica forte.",
   "email": "kuf.ravenna@gmail.com",
+  "_analytics": "Token di Cloudflare Web Analytics (pubblico, finisce nell'HTML). Vuoto = niente statistiche. Vedi docs/go-live.md.",
+  "analyticsToken": "",
   "nav": [
     { "label": "Home", "href": "/" },
     { "label": "Concerti", "href": "/concerti" },
@@ -19,8 +21,7 @@
       "url": "https://www.youtube.com/channel/UCTWu6UbxU95DmHe3LJIHbrw"
     },
     { "id": "instagram", "label": "Instagram", "url": "https://www.instagram.com/kuf.quellichesuonano" },
-    { "id": "spotify", "label": "Spotify", "url": "https://open.spotify.com/artist/19RHxgdzVkXbRI6IcwMPz3" },
-    { "id": "soundcloud", "label": "SoundCloud", "url": "https://soundcloud.com/kuf-4" }
+    { "id": "spotify", "label": "Spotify", "url": "https://open.spotify.com/artist/19RHxgdzVkXbRI6IcwMPz3" }
   ],
   "facts": [
     "I Kuf sono di Ravenna e sono nati nel 2014.",

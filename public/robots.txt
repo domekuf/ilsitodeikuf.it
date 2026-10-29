@@ -1,0 +1,7 @@
+User-agent: *
+Disallow: /api/
+Disallow: /_actions/
+Disallow: /_server-islands/
+Disallow: /disiscriviti/
+
+Sitemap: https://ilsitodeikuf.it/sitemap.xml

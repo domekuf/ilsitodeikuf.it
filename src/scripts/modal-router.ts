@@ -40,6 +40,8 @@ function show(dialog: HTMLDialogElement, opener: HTMLElement | null) {
   if (dialog.open) dialog.close(); // aperta "non modale" dall'HTML del server
   openers.set(dialog, opener);
   dialog.showModal();
+  // per chi vuole caricare qualcosa solo a modale aperta (es. le foto delle venue)
+  dialog.dispatchEvent(new CustomEvent('kuf:modal-open', { bubbles: true }));
   // il focus va sul titolo, così lo screen reader legge subito di cosa si tratta
   const title = dialog.querySelector<HTMLElement>(`#${CSS.escape(dialog.id)}-title`);
   if (title) {
